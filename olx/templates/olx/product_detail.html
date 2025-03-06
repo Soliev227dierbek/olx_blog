@@ -1,17 +1,15 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Главная
+{{ product.title }}
 {% endblock %}
 
 {% block content %}
 <div class="card-group">
-    {% for product in products %}
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">{{ product.title }}</h5>
         <p class="card-text">{{ product.text }}</p>
-        <a href="{{ product.get_link }}"><p class="card-price">{{ product.price }}</p></a>
-        {% endfor %}
+        <p class="card-price">{{ product.price }}</p>
       </div>
 {% endblock %}
