@@ -10,14 +10,15 @@
     {% for product in products %}
     <div class="card">
         {% if product.image %}
-        <img src="{{product.image.url}}" alt="...">
+        <img src="{{product.image.url}}" class="card-img-top" alt="...">
         {% else %}
         <img src="{% static 'img/9.png' %}" alt="...">
         {% endif %}
         <div class="card-body">
+            <hr>
             <h5 class="card-title">{{ product.title }}</h5>
             <p class="card-text">{{ product.text }}</p>
-            <a href="{{ product.get_link }}"><p class="card-price">{{ product.price }}</p></a>
+            <a href="{{ product.get_link }}"><p class="card-price">{{ product.price }} сум</p></a>
         </div>
     </div>
     {% endfor %}
