@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
 Главная
@@ -8,10 +9,17 @@
 <div class="card-group">
     {% for product in products %}
     <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">{{ product.title }}</h5>
-        <p class="card-text">{{ product.text }}</p>
-        <a href="{{ product.get_link }}"><p class="card-price">{{ product.price }}</p></a>
-        {% endfor %}
-      </div>
+        {% if product.image %}
+        <img src="{{product.image.url}}" alt="...">
+        {% else %}
+        <img src="{% static 'img/9.png' %}" alt="...">
+        {% endif %}
+        <div class="card-body">
+            <h5 class="card-title">{{ product.title }}</h5>
+            <p class="card-text">{{ product.text }}</p>
+            <a href="{{ product.get_link }}"><p class="card-price">{{ product.price }}</p></a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
 {% endblock %}
