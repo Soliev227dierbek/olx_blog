@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Поиск по запросу: {{ query }}
+{% endblock %}
+
+{% block content %}
+<h1>Поиск по запросу: {{ query }}</h1>
+<div class="card-group">
+    {% for product in search_obj %}
+    <div class="card">
+        {% if product.image %}
+        <img src="{{ product.image.url }}" class="card-img-top" alt="...">
+        {% else %}
+        <img src="{% static 'img/9.png' %}" alt="...">
+        {% endif %}
+        <div class="card-body">
+            <hr>
+            <h5 class="card-title">{{ product.title }}</h5>
+            <p class="card-text">{{ product.text }}</p>
+            <a href="{{ product.get_link }}"><p class="card-price">{{ product.price }} сум</p></a>
+        </div>
+    </div>
+    {% empty %}
+    <h2>По вашему запросу: {{ query }}, ничего не найдено</h2>
+    {% endfor %}
+</div>
+{% endblock %}
