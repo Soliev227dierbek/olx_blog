@@ -8,7 +8,7 @@
 {% block content %}
 <div class="card-group">
     {% for product in products %}
-    <div class="card">
+    <div class="card" style="border-radius: 20px 20px 20px 20px; margin: 10px;">
         {% if product.image %}
         <img src="{{product.image.url}}" class="card-img-top" alt="...">
         {% else %}
@@ -18,7 +18,7 @@
             <hr>
             <h5 class="card-title">{{ product.title }}</h5>
             <p class="card-text">{{ product.text }}</p>
-            <a href="{{ product.get_link }}"><p class="card-price">{{ product.price }} сум</p></a>
+            <h5>Цена:</h5><a href="{{ product.get_link }}" style="text-decoration: none;"><p class="card-price">{{ product.price }} сум</p></a>
         </div>
     </div>
     {% endfor %}
