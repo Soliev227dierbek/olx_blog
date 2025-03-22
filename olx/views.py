@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
-from .models import Product
+from .models import Product, Profile
 from django.db.models import Q
-from .forms import RegisterForm
+from .forms import RegisterForm, ProfileForm
 from django.contrib.auth import authenticate, login, logout
 
 def index(request):
@@ -61,12 +61,25 @@ def login_site(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
+                return redirect('index')
             else:
-                return render(request, 'olx/login.html', {'error': 'Неверные данные'})
-            return render(request, 'olx/login.html')
-        return redirect('index')
+                return render(request, 'olx/login.html', {'error': 'Nevernoye danniye'})
+        return render(request, 'olx/login.html')
+    return redirect('index')
     
 def logout_site(request):
     if request.user.is_authenticated:
         logout(request)
     return redirect('index')
+
+def profile(request):
+    profile = request.user.profile
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid:
+            form.save()
+            return redirect('index')
+    else:
+        form = ProfileForm(instance=profile)
+    return render(request, 'profile.html', {'form':form})
+

@@ -1,6 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from django.contrib.auth.models import User
+from .models import Profile
 class RegisterForm(UserCreationForm):
     username = forms.CharField(label="Никнейм", required=True, widget=forms.TextInput(attrs={'class' : 'form-control footer-input margin-b-20'}))
     password1 = forms.CharField(label="Пароль", required=True, widget=forms.PasswordInput(attrs={'class' : 'form-control footer-input margin-b-20'}))
@@ -22,3 +23,7 @@ class RegisterForm(UserCreationForm):
         if commit:
             user.save()
             return user
+        
+class ProfileForm(forms.ModelForm):
+    model = Profile
+    fields = ['avatar', 'bio']
