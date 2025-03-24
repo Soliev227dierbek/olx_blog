@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .models import Product, Profile
 from django.db.models import Q
 from .forms import RegisterForm, ProfileForm
+from django.core.files.storage import FileSystemStorage
 from django.contrib.auth import authenticate, login, logout
 
 def index(request):
@@ -23,6 +24,11 @@ def create(request):
         product.title = request.POST.get('title')
         product.text = request.POST.get('text')
         product.price = request.POST.get('price')
+        if request.FILES.get('image', False) != False:
+            myfile = request.FILES['image']
+            fs = FileSystemStorage()
+            filename = fs.save(myfile.name, myfile)
+            product.image = filename
         product.save()
         return redirect('index')
 
@@ -32,6 +38,11 @@ def update(request, id):
         product.title = request.POST.get('title')
         product.text = request.POST.get('text')
         product.price = request.POST.get('price')
+        if request.FILES.get('image', False) != False:
+            myfile = request.FILES['image']
+            fs = FileSystemStorage()
+            filename = fs.save(myfile.name, myfile)
+            product.image = filename
         product.save()
         return redirect('index')
     return render(request, 'update.html', {'product':product})
