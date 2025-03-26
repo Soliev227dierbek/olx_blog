@@ -31,6 +31,7 @@ def create(request):
             product.image = filename
         product.save()
         return redirect('index')
+    return render(request, 'olx/create_product.html')
 
 def update(request, id):
     product = Product.objects.get(id=id)
@@ -45,14 +46,14 @@ def update(request, id):
             product.image = filename
         product.save()
         return redirect('index')
-    return render(request, 'update.html', {'product':product})
+    return render(request, 'olx/update.html', {'product':product})
 
 def delete(request, id):
     product = Product.objects.get(id=id)
     if request.method == 'POST':
         product.delete()
+        return redirect('index')
     return redirect('index')
-# Create your views here.
 
 def register(request):
     if request.method == 'POST':

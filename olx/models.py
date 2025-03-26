@@ -7,9 +7,6 @@ class Product(models.Model):
     text = models.TextField('Текст')
     image = models.ImageField('Фото', blank=True, null=True)
     price = models.IntegerField('Цена', default=0)
-
-    def get_link(self):
-        return reverse('product_detail_url', kwargs = {'id':self.id})
     
     def __str__(self):
         return self.title

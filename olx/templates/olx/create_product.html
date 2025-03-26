@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Create new post
+{% endblock %}
+
+{% block content %}
+<form action="{% url 'create' %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <p>
+        <label for="title">title</label>
+        <input type="text" class="form-control" id="title" name="title" placeholder="title">
+    </p>
+    <p>
+        <label for="price">price</label>
+        <input type="number" class="form-control" id="price" name="price" placeholder="price" required>
+    </p>
+    <p>
+        <label for="text">text</label>
+        <input type="text" class="form-control" id="text" name="text" placeholder="text" required>
+    </p>
+    <p>
+        <div class="mb-3">
+            <label for="formFile" class="form-label">image</label>
+            <input class="form-control" type="file" id="image" name="image" placeholder="image" required>
+        </div>
+    </p>
+    <button class="btn btn-primary">Create</button>
+</form>
+{% endblock %}

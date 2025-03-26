@@ -18,48 +18,11 @@
             <p class="card-text">{{ product.text }}</p>
             <p class="card-price">{{ product.price }}</p>
         </div>
-        <form action="{% url 'create' %}" method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            <p>
-                <label for="title">title</label>
-                <input type="text" class="form-control" id="title" name="title" placeholder="title" required>
-            </p>
-            <p>
-                <label for="price">price</label>
-                <input type="number" class="form-control" id="price" name="price" placeholder="price" required>
-            </p>
-            <p>
-                <label for="text">text</label>
-                <input type="text" class="form-control" id="text" name="text" placeholder="text" required>
-            </p>
-            <p>
-                <div class="mb-3">
-                    <label for="formFile" class="form-label">image</label>
-                    <input class="form-control" type="file" id="image" name="image" placeholder="image" required>
-                </div>
-            </p>
-            <button class="btn btn-success">Create</button>
+        <form action="{% url 'delete' product.id %}" method="POST">
+                {% csrf_token %}
+                <button class="btn btn-danger" type="submit">Delete</button>
         </form>
-
-        <table>
-            {% for product in products %}
-            <tr>
-                <td>{{ product.title }}</td>
-                <td>{{ product.price }}</td>
-                <td>{{ product.text }}</td>
-                <td>{{ product.image }}</td>
-                <td>
-                    <a href="{% url 'update' product.id %}">Update</a>
-                </td>
-                <td>
-                    <form action="{% url 'delete' product.id %}" method="POST">
-                        {% csrf_token %}
-                        <button>Delete</button>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
+        <a href="{% url 'update' product.id%}"><button class="btn btn-success">Update</button></a>
     </div>
 </div>
 {% endblock %}

@@ -17,8 +17,8 @@
         <div class="card-body">
             <hr>
             <h5 class="card-title">{{ product.title }}</h5>
-            <p class="card-text">{{ product.text }}</p>
-            <h5>Цена:</h5><a href="{{ product.get_link }}" style="text-decoration: none;"><p class="card-price">{{ product.price }} сум</p></a>
+            <p class="card-text">{{ product.text | slice:'0:50'}}...</p>
+            <h5>Цена:</h5><a href="{% url 'product_detail' id=product.id %}" style="text-decoration: none;"><p class="card-price">{{ product.price }} сум</p></a>
         </div>
     </div>
     {% endfor %}
