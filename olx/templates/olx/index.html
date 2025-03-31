@@ -6,6 +6,23 @@
 {% endblock %}
 
 {% block content %}
+<h1>Категории</h1>
+<hr>
+<div class="card-group">
+    {% for category in categories %}
+    <div class="card" style="border-radius: 20px 20px 20px 20px; margin: 10px;">
+    <h2>{{ category.name }}</h2>
+        <ul>
+            {% for subcategory in category.subcategories.all %}
+                <li>{{ subcategory.name }}</li>
+            {% empty %}
+                <li>Нет подкатегорий</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endfor %}
+</div>
+
 <div class="card-group">
     {% for product in products %}
     <div class="card" style="border-radius: 20px 20px 20px 20px; margin: 10px;">

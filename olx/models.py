@@ -22,4 +22,22 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
+    
+class Category(models.Model):
+    name = models.CharField('Название Категории',max_length=255, unique=True)
+
+    def __str__(self):
+        return self.name
+
+class Meta:
+        verbose_name = 'Категория'
+        verbose_name_plural = 'Категории'
+
+class Subcategory(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='subcategories')
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
 # Create your models here.
+#unique=True в Django означает, что значение этого поля должно быть уникальным среди всех записей в таблице базы данных.

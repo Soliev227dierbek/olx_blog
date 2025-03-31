@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Категории и Подкатегории
+{% endblock %}
+
+{% block content %}
+    <h1>Категории</h1>
+    <ul>
+        <li>
+            <strong>{{ category.name }}</strong>
+              <ul>
+                  <li>{{ subcategory.name }}</li>
+              </ul>
+        </li>
+    </ul>
+{% endblock %}

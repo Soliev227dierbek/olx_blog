@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Product, Profile
+from .models import Product, Profile, Category, Subcategory
 from django.db.models import Q
 from .forms import RegisterForm, ProfileForm
 from django.core.files.storage import FileSystemStorage
@@ -7,7 +7,12 @@ from django.contrib.auth import authenticate, login, logout
 
 def index(request):
     products = Product.objects.all()
-    return render(request, 'olx/index.html', {'products':products})
+    categories = Category.objects.all()
+    return render(request, 'olx/index.html', {'products':products, 'categories':categories})
+
+def category_list(request):
+    categories = Category.objects.filter(parent__isnull=True)  # Получаем только главные категории
+    return render(request, 'olx/categories.html', {'categories': categories})
 
 def product_detail(request, id):
     product = Product.objects.get(id=id)
@@ -95,3 +100,6 @@ def profile(request):
         form = ProfileForm(instance=profile)
     return render(request, 'profile.html', {'form':form})
 
+def category_list(request):
+    categories = Category.objects.prefetch_related('subcategories').all()
+    return render(request, 'olx/categories.html', {'categories': categories})
