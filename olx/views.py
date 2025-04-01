@@ -10,10 +10,6 @@ def index(request):
     categories = Category.objects.all()
     return render(request, 'olx/index.html', {'products':products, 'categories':categories})
 
-def category_list(request):
-    categories = Category.objects.filter(parent__isnull=True)  # Получаем только главные категории
-    return render(request, 'olx/categories.html', {'categories': categories})
-
 def product_detail(request, id):
     product = Product.objects.get(id=id)
     return render(request, 'olx/product_detail.html', {'product':product})
@@ -100,6 +96,10 @@ def profile(request):
         form = ProfileForm(instance=profile)
     return render(request, 'profile.html', {'form':form})
 
-def category_list(request):
+def categories(request):
     categories = Category.objects.prefetch_related('subcategories').all()
     return render(request, 'olx/categories.html', {'categories': categories})
+
+def subcategories(request, id):
+    subcategory = Subcategory.objects.get(id=id)
+    return render(request, 'olx/subcategory.html', {'subcategory': subcategory})

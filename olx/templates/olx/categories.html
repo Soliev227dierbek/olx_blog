@@ -6,13 +6,14 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Категории</h1>
+    {% for category in categories %}
+        <p>{{ category.name }}</p>
     <ul>
-        <li>
-            <strong>{{ category.name }}</strong>
-              <ul>
-                  <li>{{ subcategory.name }}</li>
-              </ul>
-        </li>
+        {% for subcategory in category.subcategories.all %}
+            <a href="{% url 'subcategories' id=subcategory.id %}"><li>{{ subcategory.name }}</li></a>
+        {% empty %}
+            <li>Нет подкатегорий</li>
+        {% endfor %}
     </ul>
+    {% endfor %}
 {% endblock %}
