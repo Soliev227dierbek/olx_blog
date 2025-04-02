@@ -7,7 +7,7 @@
 
 {% block content %}
     {% for category in categories %}
-        <p>{{ category.name }}</p>
+        <p style="text-decoration: none;">{{ category.name }}</p>
     <ul>
         {% for subcategory in category.subcategories.all %}
             <a href="{% url 'subcategories' id=subcategory.id %}"><li>{{ subcategory.name }}</li></a>

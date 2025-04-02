@@ -13,6 +13,12 @@ class RegisterForm(UserCreationForm):
     class Meta:
         model = User
         fields = ("first_name", "last_name", "email", "username", "password1", "password2", )
+        
+class ProfileForm(forms.ModelForm):
+
+    class Meta:
+        model = Profile
+        fields = ('bio', 'location')
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -23,7 +29,3 @@ class RegisterForm(UserCreationForm):
         if commit:
             user.save()
             return user
-        
-class ProfileForm(forms.ModelForm):
-    model = Profile
-    fields = ['avatar', 'bio']

@@ -38,8 +38,8 @@ class Product(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='Пользователь')
-    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
     bio = models.TextField(blank=True, null=True)
+    location = models.CharField('Местонахождение', max_length=100, default='Не указано')
 
     def __str__(self):
         return self.user.username

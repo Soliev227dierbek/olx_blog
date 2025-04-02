@@ -3,6 +3,7 @@ from .models import Product, Profile, Category, Subcategory
 from django.db.models import Q
 from .forms import RegisterForm, ProfileForm
 from django.core.files.storage import FileSystemStorage
+from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 
 def index(request):
@@ -60,7 +61,8 @@ def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            Profile.objects.create(user=user)
             return redirect('index')
     else:
         form = RegisterForm()
@@ -86,16 +88,16 @@ def logout_site(request):
     return redirect('index')
 
 def profile(request):
-    profile = request.user.profile
-    if request.method == 'POST':
-        form = ProfileForm(request.POST, request.FILES, instance=profile)
-        if form.is_valid:
-            form.save()
-            return redirect('index')
-    else:
-        form = ProfileForm(instance=profile)
-    return render(request, 'profile.html', {'form':form})
-
+    if not request.user.is_authenticated:
+        return redirect('login')
+    profile, created = Profile.objects.get_or_create(user=request.user)
+    if request.method == "POST":
+        profile.bio = request.POST.get('bio', 'None')
+        profile.location = request.POST.get('location','Не указано')
+        profile.save()
+        return redirect('index')
+    return render(request, 'olx/profile.html', {'profile': profile})
+    
 def categories(request):
     categories = Category.objects.prefetch_related('subcategories').all()
     return render(request, 'olx/categories.html', {'categories': categories})

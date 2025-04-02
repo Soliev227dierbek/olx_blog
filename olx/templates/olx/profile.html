@@ -1,5 +1,30 @@
-<form method="post" enctype="multipart/form-data">
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Профиль
+{% endblock %}
+
+{% block content %}
+<form method="POST">
     {% csrf_token %}
-    {{ form.as_p }}
+    {% if profile.bio and profile.location %}
+    <div class="card">
+        <p>{{ profile.bio }}</p>
+        <p>{{ profile.location }}</p>
+    </div>
+    {% else %}
+    <h2>Создайте Профиль</h2>
+    <hr>
+    <div>
+        <label for="bio">Биография</label>
+        <textarea id="bio" name="bio">{{ profile.bio }}</textarea>
+    </div>
+    <div>
+        <label for="location">Местоположение</label>
+        <input type="text" id="location" name="location" value="{{ profile.location }}">
+    </div>
     <button type="submit">Сохранить</button>
+    {% endif %}
 </form>
+{% endblock %}
