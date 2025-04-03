@@ -90,13 +90,22 @@ def logout_site(request):
 def profile(request):
     if not request.user.is_authenticated:
         return redirect('login')
-    profile, created = Profile.objects.get_or_create(user=request.user)
+    profile, created = Profile.objects.get_or_create(user=request.user) 
     if request.method == "POST":
-        profile.bio = request.POST.get('bio', 'None')
-        profile.location = request.POST.get('location','Не указано')
-        profile.save()
-        return redirect('index')
-    return render(request, 'olx/profile.html', {'profile': profile})
+        if "delete_profile" in request.POST:
+            user = request.user
+            profile.delete()
+            user.delete()  # Удаляем самого пользователя
+            logout(request)  # Разлогиниваем пользователя
+            return redirect('index')  # Перенаправляем на главную
+        else:
+            form = ProfileForm(request.POST, instance=profile)
+            if form.is_valid():
+                form.save()
+                return redirect('profile')
+    else:
+        form = ProfileForm(instance=profile)
+    return render(request, 'olx/profile.html', {'profile': profile, 'form': form})
     
 def categories(request):
     categories = Category.objects.prefetch_related('subcategories').all()

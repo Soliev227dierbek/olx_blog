@@ -6,25 +6,45 @@
 {% endblock %}
 
 {% block content %}
-<form method="POST">
+<form method="POST" action="">
     {% csrf_token %}
-    {% if profile.bio and profile.location %}
-    <div class="card">
-        <p>{{ profile.bio }}</p>
-        <p>{{ profile.location }}</p>
-    </div>
+    {% if profile.name and profile.bio and profile.location %}
+        <div class="card">
+            Имя пользователя:
+            {% if profile.name %}
+                <h5>{{ profile.name }}</h5>
+            {% else %}
+                <h5>Не указано</h5>
+            {% endif %}
+            <hr>
+            Биография:
+            {% if profile.bio %}
+                <h6>{{ profile.bio }}</h6>
+            {% else %}
+                <h6>Нет биографии</h6>
+            {% endif %}
+            <hr>
+            Локация:
+            {% if profile.location %}
+                <h6>{{ profile.location }}</h6>
+            {% else %}
+                <h6>Не указано</h6>
+            {% endif %}
+            <form method="POST">
+                {% csrf_token %}
+                <button type="submit" name="delete_profile" style="background-color: red; color: white;">
+                    Удалить профиль и аккаунт
+                </button>
+            </form>
+            
+        </div>
     {% else %}
-    <h2>Создайте Профиль</h2>
-    <hr>
-    <div>
-        <label for="bio">Биография</label>
-        <textarea id="bio" name="bio">{{ profile.bio }}</textarea>
-    </div>
-    <div>
-        <label for="location">Местоположение</label>
-        <input type="text" id="location" name="location" value="{{ profile.location }}">
-    </div>
-    <button type="submit">Сохранить</button>
+        <h2>Создайте Профиль</h2>
+        <hr>
+
+        {{ form.as_p }}
+
+        <button type="submit">Сохранить</button>
     {% endif %}
 </form>
 {% endblock %}

@@ -14,12 +14,6 @@ class RegisterForm(UserCreationForm):
         model = User
         fields = ("first_name", "last_name", "email", "username", "password1", "password2", )
         
-class ProfileForm(forms.ModelForm):
-
-    class Meta:
-        model = Profile
-        fields = ('bio', 'location')
-
     def save(self, commit=True):
         user = super().save(commit=False)
         user.email = self.cleaned_data["email"]
@@ -29,3 +23,18 @@ class ProfileForm(forms.ModelForm):
         if commit:
             user.save()
             return user
+        
+class ProfileForm(forms.ModelForm):
+    name = forms.CharField(label="Имя", required=True, widget=forms.TextInput(attrs={'class' : 'form-control footer-input margin-b-20'}))
+    bio = forms.CharField(label="Биография", required=True, widget=forms.Textarea(attrs={'class' : 'form-control footer-input margin-b-20'}))
+    location = forms.CharField(label="Локация", required=True, widget=forms.TextInput(attrs={'class' : 'form-control footer-input margin-b-20'}))
+
+    class Meta:
+        model = Profile
+        fields = ("name", "bio", "location")
+
+    def delete_profile(self):
+        if self.instance:  # Проверяем, есть ли профиль
+            user = self.instance.user  # Получаем пользователя
+            self.instance.delete()  # Удаляем профиль
+            user.delete()  # Удаляем пользователя
