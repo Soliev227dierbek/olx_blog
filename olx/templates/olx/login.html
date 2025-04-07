@@ -9,8 +9,8 @@ Login
 <div class="col-md-8 offset-md-2">
     <form action="{% url 'login' %}" method="POST">
         {% csrf_token %}
-        {% if user.delete %}
-        Такого пользователя нет!
+        {% if error %}
+            <div class="alert alert-danger">{{ error }}</div>
         {% endif %}
         <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
         <div class="form-floating">

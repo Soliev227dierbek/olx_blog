@@ -1,5 +1,5 @@
 body{
-    background-color: blue;
+    background: linear-gradient(to right, #ff7e5f, #feb47b);
 }
 
 .card{
@@ -9,4 +9,13 @@ body{
 
 .navbar-brand{
     color: white;
+}
+
+.button:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+.img-basket{
+    height: 20px;
+    width: 20px;
 }

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Корзина
+{% endblock %}
+
+{% block content %}
+<h2>Ваша корзина</h2>
+{% for item in cart_items %}
+    <p>{{ item.product.name }} - {{ item.quantity }} шт. ({{ item.total_price }} сум)</p>
+    <form action="{% url 'update_cart' item.product.id %}" method="post">
+        {% csrf_token %}
+        <input type="number" name="quantity" value="{{ item.quantity }}" min="1">
+        <button type="submit">Обновить</button>
+    </form>
+    <a href="{% url 'remove_from_cart' item.product.id %}">Удалить</a>
+{% endfor %}
+<p><strong>Итого: {{ total_price }} сум</strong></p>
+{% endblock %}

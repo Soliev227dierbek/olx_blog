@@ -1,5 +1,6 @@
 from django.db import models
 from django.shortcuts import reverse
+from django.utils import timezone
 from django.contrib.auth.models import User
 
 class Category(models.Model):
@@ -27,6 +28,7 @@ class Product(models.Model):
     text = models.TextField('Текст')
     image = models.ImageField('Фото', blank=True, null=True)
     price = models.IntegerField('Цена', default=0)
+    date = models.DateTimeField('Дата выпуска', default = timezone.now)
     category = models.ForeignKey(Subcategory, on_delete=models.CASCADE, verbose_name = 'Категория', default = get_default_subcategory)
     
     def __str__(self):
@@ -44,6 +46,17 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
+    
+class Cart(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+
+    def total_price(self):
+        return self.product.price * self.quantity
+
+    def __str__(self):
+        return f"{self.user.username} - {self.product.name} ({self.quantity})"
     
 # Create your models here.
 #unique=True в Django означает, что значение этого поля должно быть уникальным среди всех записей в таблице базы данных.

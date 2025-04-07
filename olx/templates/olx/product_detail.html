@@ -23,6 +23,7 @@
                 <button class="btn btn-danger" type="submit">Delete</button>
         </form>
         <a href="{% url 'update' product.id%}"><button class="btn btn-success">Update</button></a>
+        <a href="{% url 'add_to_cart' product.id %}"><button class="btn btn-success">Добавить в корзину</button></a>
     </div>
 </div>
 {% endblock %}
