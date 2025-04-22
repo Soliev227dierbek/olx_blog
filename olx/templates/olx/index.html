@@ -9,7 +9,7 @@
 <hr>
 <div class="card-group">
     {% for category in categories %}
-    <div class="card" style="border-radius: 20px 20px 20px 20px; margin: 10px;">
+    <div class="category">
     <a href="{% url 'categories' %}" style="text-decoration: none;"><h2>{{ category.name }}</h2></a>
         <ul>
             {% for subcategory in category.subcategories.all %}
@@ -19,24 +19,42 @@
     </div>
     {% endfor %}
 </div>
-
-<div class="card-group">
+  <div class="products-grid">
     {% for product in products %}
-    <div class="card" style="border-radius: 20px 20px 20px 20px; margin: 10px;">
-        {% if product.image %}
-        <img src="{{product.image.url}}" class="card-img-top" alt="...">
-        {% else %}
-        <img src="{% static 'img/9.png' %}" alt="...">  
-        {% endif %}
-        <div class="card-body">
-            <hr>
-            <h5 class="card-title">{{ product.title }}</h5>
-            <p class="card-text">{{ product.text | slice:'0:50'}}...</p>
-            <p class="card-text"><small class="text-body-secondary">{{ post.date|timesince }} назад</small></p>
-            <h5>Цена:</h5><a href="{% url 'product_detail' id=product.id %}" style="text-decoration: none;"><p class="card-price">{{ product.price }} сум</p></a>
-            <a href="{% url 'add_to_cart' product.id %}"><img class="img-basket" src="{% static 'img/icons8-добавить-в-корзину-48.png' %}" alt=""></a>
+        <div class="product-card">
+          <a href="{% url 'product_detail' id=product.id %}">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+            {% else %}
+                <img src="{% static 'img/zaglushka.png' %}" alt="Нет изображения" class="product-image">
+            {% endif %}
+
+            <div class="product-name">{{ product.name }}</div>
+            <div class="product-description">{{ product.text|truncatechars:60 }}</div>
+            <div class="product-time">{{ product.data|timesince }} назад</div>
+            <a href="{% url 'product_detail' id=product.id %}"><div class="product-price">{{ product.price }} сум</div></a>
+            <div class="cart-icon"><a href="{% url 'add_to_cart' product.id %}">🛒</div></a>
+          </a>
         </div>
-    </div>
     {% endfor %}
-</div>
+  </div>
+    <ul class="pagination">
+      <li class="page-item">
+        {% if products.has_previous %}
+        <a class="page-link" href="?page={{ products.previous_page_number }}" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+        {% endif %}
+      </li>
+      <li class="page-item"><a class="page-link" href="#">1</a></li>
+      <li class="page-item"><a class="page-link" href="#">2</a></li>
+      <li class="page-item"><a class="page-link" href="#">3</a></li>
+      <li class="page-item">
+        {% if products.has_next %}
+        <a class="page-link" href="?page={{ products.next_page_number }}" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+        {% endif %}
+      </li>
+    </ul>
 {% endblock %}

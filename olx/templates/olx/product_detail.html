@@ -24,6 +24,7 @@
         </form>
         <a href="{% url 'update' product.id%}"><button class="btn btn-success">Update</button></a>
         <a href="{% url 'add_to_cart' product.id %}"><button class="btn btn-success">Добавить в корзину</button></a>
+        <h1 class="date-product">{{ product.date }} назад...</h1>
     </div>
 </div>
 {% endblock %}

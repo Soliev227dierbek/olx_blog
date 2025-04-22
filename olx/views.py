@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Product, Profile, Category, Subcategory, Cart
+from django.core.paginator import Paginator
 from django.db.models import Q
 from .forms import RegisterForm, ProfileForm
 from django.core.files.storage import FileSystemStorage
@@ -8,8 +9,12 @@ from django.contrib.auth import authenticate, login, logout
 
 def index(request):
     products = Product.objects.all()
+    paginator = Paginator(products, 2)
     categories = Category.objects.all()
-    return render(request, 'olx/index.html', {'products':products, 'categories':categories})
+
+    page = request.GET.get('page')  # Получаем номер страницы из URL
+    products_on_page = paginator.get_page(page)
+    return render(request, 'olx/index.html', {'products':products_on_page, 'categories':categories})
 
 def product_detail(request, id):
     product = Product.objects.get(id=id)
@@ -98,9 +103,9 @@ def profile(request):
         if "delete_profile" in request.POST:
             user = request.user
             profile.delete()
-            user.delete()  # Удаляем самого пользователя
-            logout(request)  # Разлогиниваем пользователя
-            return redirect('index')  # Перенаправляем на главную
+            user.delete()
+            logout(request)
+            return redirect('index')
         else:
             form = ProfileForm(request.POST, instance=profile)
             if form.is_valid():
@@ -118,8 +123,8 @@ def subcategories(request, id):
     subcategory = Subcategory.objects.get(id=id)
     return render(request, 'olx/subcategory.html', {'subcategory': subcategory})
 
-def add_to_cart(request, product_id):
-    product = get_object_or_404(Product, id=product_id)
+def add_to_cart(request, id):
+    product = Product.objects.get(id=id)
     cart_item, created = Cart.objects.get_or_create(user=request.user, product=product)
 
     if not created:
@@ -133,13 +138,13 @@ def view_cart(request):
     total_price = sum(item.total_price() for item in cart_items)
     return render(request, 'olx/cart.html', {'cart_items': cart_items, 'total_price': total_price})
 
-def remove_from_cart(request, product_id):
-    cart_item = get_object_or_404(Cart, user=request.user, product_id=product_id)
+def remove_from_cart(request, id):
+    cart_item = Product.objects.get(user=request.user, id=id)
     cart_item.delete()
     return redirect('cart')
 
-def update_cart(request, product_id):
-    cart_item = get_object_or_404(Cart, user=request.user, id=product_id)
+def update_cart(request, id):
+    cart_item = Product.objects.get(user=request.user, id=id)
     if request.method == "POST":
         quantity = int(request.POST['quantity'])
         if quantity > 0:
