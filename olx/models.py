@@ -24,7 +24,7 @@ class Product(models.Model):
     def get_default_subcategory():
         default_subcategory = Subcategory.objects.first()
         return default_subcategory.id if default_subcategory else None
-    title = models.CharField('Название', max_length=255)
+    title = models.CharField('Название', max_length=255, blank=False)
     text = models.TextField('Текст')
     image = models.ImageField('Фото', blank=True, null=True)
     price = models.IntegerField('Цена', default=0)

@@ -13,6 +13,10 @@
         {% else %}
         <img src="{% static 'img/9.png' %}" class="card-img-top" alt="...">
         {% endif %}
+
+        <div class="product-category">{{ product.category.name }}</div>
+
+
         <div class="card-body">
             <h5 class="card-title">{{ product.title }}</h5>
             <p class="card-text">{{ product.text }}</p>

@@ -6,7 +6,12 @@
 {% endblock %}
 
 {% block content %}
-<hr>
+
+<form class="d-flex" role="search" action="{% url 'search' %}" method="GET" style="padding: 20px;">
+  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search">
+  <button class="btn btn-outline-success" type="submit">Search</button>
+</form>
+
 <div class="card-group">
     {% for category in categories %}
     <div class="category">
@@ -24,21 +29,20 @@
         <div class="product-card">
           <a href="{% url 'product_detail' id=product.id %}">
             {% if product.image %}
-                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+                <img src="{{ product.image.url }}" alt="" class="product-image">
             {% else %}
-                <img src="{% static 'img/zaglushka.png' %}" alt="Нет изображения" class="product-image">
+                <img src="{% static 'img/zaglushka.jpg' %}" alt="Нет изображения" class="product-image">
             {% endif %}
-
-            <div class="product-name">{{ product.name }}</div>
+            <div class="product-name">{{ product.title }}</div>
             <div class="product-description">{{ product.text|truncatechars:60 }}</div>
-            <div class="product-time">{{ product.data|timesince }} назад</div>
+            <div class="product-time">{{ product.date|timesince }} назад</div>
             <a href="{% url 'product_detail' id=product.id %}"><div class="product-price">{{ product.price }} сум</div></a>
             <div class="cart-icon"><a href="{% url 'add_to_cart' product.id %}">🛒</div></a>
           </a>
         </div>
     {% endfor %}
   </div>
-    <ul class="pagination">
+    <ul class="pagination" style="padding: 10px;">
       <li class="page-item">
         {% if products.has_previous %}
         <a class="page-link" href="?page={{ products.previous_page_number }}" aria-label="Previous">
@@ -46,7 +50,7 @@
         </a>
         {% endif %}
       </li>
-      <li class="page-item"><a class="page-link" href="#">1</a></li>
+      <li class="page-item"><a class="page-link" href="">1</a></li>
       <li class="page-item"><a class="page-link" href="#">2</a></li>
       <li class="page-item"><a class="page-link" href="#">3</a></li>
       <li class="page-item">

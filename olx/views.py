@@ -12,7 +12,7 @@ def index(request):
     paginator = Paginator(products, 2)
     categories = Category.objects.all()
 
-    page = request.GET.get('page')  # Получаем номер страницы из URL
+    page = request.GET.get('page')
     products_on_page = paginator.get_page(page)
     return render(request, 'olx/index.html', {'products':products_on_page, 'categories':categories})
 
