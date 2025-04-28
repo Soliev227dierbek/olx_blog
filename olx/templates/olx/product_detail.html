@@ -7,20 +7,17 @@
 
 {% block content %}
 <div class="card-group">
-    <div class="card">
+    <div class="card" style="padding: 16px;">
         {% if product.image %}
-        <img src="{{ product.image.url }}" class="card-img-top" alt="...">
+        <img src="{{ product.image.url }}" class="card-img-top" alt="..." style="width: 50%;">
         {% else %}
         <img src="{% static 'img/9.png' %}" class="card-img-top" alt="...">
         {% endif %}
-
-        <div class="product-category">{{ product.category.name }}</div>
-
-
         <div class="card-body">
             <h5 class="card-title">{{ product.title }}</h5>
             <p class="card-text">{{ product.text }}</p>
-            <p class="card-price">{{ product.price }}</p>
+            <h3 class="card-price" style="color: rgb(27, 239, 27);">{{ product.price }} <small style="color: black;">сум</small></h3>
+            <h6 class="date-product">{{ product.date|timesince  }} назад...</h6>
         </div>
         <form action="{% url 'delete' product.id %}" method="POST">
                 {% csrf_token %}
@@ -28,7 +25,6 @@
         </form>
         <a href="{% url 'update' product.id%}"><button class="btn btn-success">Update</button></a>
         <a href="{% url 'add_to_cart' product.id %}"><button class="btn btn-success">Добавить в корзину</button></a>
-        <h1 class="date-product">{{ product.date }} назад...</h1>
     </div>
 </div>
 {% endblock %}

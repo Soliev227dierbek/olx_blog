@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-<form method="POST" action="">
+<form method="POST" action="" style="padding: 16px;">
     {% csrf_token %}
     {% if profile.name and profile.bio and profile.location %}
         <div class="card">
@@ -35,6 +35,9 @@
                 <button class="button" type="submit" name="delete_profile" style="background-color: red; color: white;">
                     Удалить профиль и аккаунт
                 </button>
+            </form>
+            <form action="{% url 'update_profile' %}">
+                <button class="btn btn-danger">Редактировать</button>
             </form>
             
         </div>

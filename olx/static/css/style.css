@@ -107,3 +107,12 @@ a{
 .d-flex{
     width: 1000px;
 }
+
+.card-img-top{
+    border-radius: 10px 10px 10px 10px;
+    border: 2px solid gray;
+}
+
+.card-title{
+    text-align: right;
+}

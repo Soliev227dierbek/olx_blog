@@ -6,14 +6,25 @@
 {% endblock %}
 
 {% block content %}
+  <div class="accordion" id="accordionExample" style="padding: 16px;">
     {% for category in categories %}
-        <p style="text-decoration: none;">{{ category.name }}</p>
-    <ul>
-        {% for subcategory in category.subcategories.all %}
-            <a href="{% url 'subcategories' id=subcategory.id %}"><li>{{ subcategory.name }}</li></a>
-        {% empty %}
-            <li>Нет подкатегорий</li>
-        {% endfor %}
-    </ul>
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="false" aria-controls="collapse{{ forloop.counter }}">
+            {{ category.name }}
+          </button>
+        </h2>
+        <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="heading{{ forloop.counter }}" data-bs-parent="#accordionExample">
+          <div class="accordion-body">
+            {% for subcategory in category.subcategories.all %}
+              <a href="{% url 'subcategories' id=subcategory.id %}" style="color: black;">{{ subcategory.name }}</a><br>
+            {% empty %}
+              <p>Нет подкатегорий</p>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
     {% endfor %}
+  </div>
+    
 {% endblock %}

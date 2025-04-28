@@ -31,6 +31,9 @@ class Product(models.Model):
     date = models.DateTimeField('Дата выпуска', default = timezone.now)
     category = models.ForeignKey(Subcategory, on_delete=models.CASCADE, verbose_name = 'Категория', default = get_default_subcategory)
     
+    def name(self):
+        return self.title
+
     def __str__(self):
         return self.title
     
@@ -57,6 +60,14 @@ class Cart(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.product.name} ({self.quantity})"
+    
+
+class Favorite(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='Пользователь')
+
+    def __str__(self):
+        return self.product
     
 # Create your models here.
 #unique=True в Django означает, что значение этого поля должно быть уникальным среди всех записей в таблице базы данных.

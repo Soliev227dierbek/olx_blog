@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Product, Profile, Category, Subcategory, Cart
+from .models import Product, Profile, Category, Subcategory, Cart, Favorite
 from django.core.paginator import Paginator
 from django.db.models import Q
 from .forms import RegisterForm, ProfileForm
@@ -153,3 +153,32 @@ def update_cart(request, id):
         else:
             cart_item.delete()
     return redirect('cart')
+
+def add_favorites(request, id):
+    product = Product.objects.get(id=id)
+    user = Profile.objects.get(user=request.user)
+    product, created = Favorite.objects.get_or_create(user=request.user, product=product)
+    return render(request, 'olx/favorites.html', {'product':product, 'user':user})
+
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from .models import Profile
+from .forms import ProfileForm
+
+@login_required
+def update_profile(request):
+    profile = Profile.objects.get(user=request.user)
+
+    if request.method == 'POST':
+        # Если данные были отправлены с формы
+        form = ProfileForm(request.POST, instance=profile)
+        if form.is_valid():
+            # Сохраняем обновленные данные профиля
+            form.save()
+            return redirect('profile')  # Перенаправляем на страницу профиля после успешного обновления
+
+    else:
+        # Если метод GET, то передаем текущие данные в форму для отображения
+        form = ProfileForm(instance=profile)
+
+    return render(request, 'olx/update_profile.html', {'form': form, 'profile': profile})
