@@ -24,10 +24,9 @@
     </div>
     {% endfor %}
 </div>
-  <div class="products-grid">
+  <div class="products-grid" style="display: flex;">
     {% for product in products %}
         <div class="product-card">
-          <a href="{% url 'product_detail' id=product.id %}">
             {% if product.image %}
                 <img src="{{ product.image.url }}" alt="" class="product-image">
             {% else %}
@@ -37,8 +36,7 @@
             <div class="product-description">{{ product.text|truncatechars:60 }}</div>
             <div class="product-time">{{ product.date|timesince }} назад</div>
             <a href="{% url 'product_detail' id=product.id %}"><div class="product-price">{{ product.price }} сум</div></a>
-            <div class="cart-icon"><a href="{% url 'add_to_cart' product.id %}">🛒</div></a>
-          </a>
+            <div class="cart-icon"><a href="{% url 'add_to_cart' product.id %}">🛒</a></div>
         </div>
     {% endfor %}
   </div>

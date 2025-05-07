@@ -6,11 +6,14 @@
 {% endblock %}
 
 {% block content %}
-<form method="POST" action="" style="padding: 16px;">
     {% csrf_token %}
-    {% if profile.name and profile.bio and profile.location %}
-        <div class="card">
-            Имя пользователя:
+    {% if profile.name and profile.bio and profile.location and profile.avatar %}
+        <div class="card" style="padding: 16px;">
+            {% if user.profile.avatar %}
+                <img src="{{ user.profile.avatar.url }}" alt="Avatar">
+            {% else %}
+                <p>Нет аватарки</p>
+            {% endif %}
             {% if profile.name %}
                 <h5>{{ profile.name }}</h5>
             {% else %}
@@ -49,5 +52,4 @@
 
         <button type="submit">Сохранить</button>
     {% endif %}
-</form>
 {% endblock %}

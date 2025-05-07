@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Product, Profile, Category, Subcategory, Cart, Favorite
 from django.core.paginator import Paginator
+from django.contrib import messages
 from django.db.models import Q
 from .forms import RegisterForm, ProfileForm
 from django.core.files.storage import FileSystemStorage
@@ -124,48 +125,55 @@ def subcategories(request, id):
     return render(request, 'olx/subcategory.html', {'subcategory': subcategory})
 
 def add_to_cart(request, id):
-    product = Product.objects.get(id=id)
-    cart_item, created = Cart.objects.get_or_create(user=request.user, product=product)
-
+    product = get_object_or_404(Product, id=id)
+    user = request.user  # Получаем текущего пользователя
+    cart_product, created = Cart.objects.get_or_create(user=user, product=product)
+    
     if not created:
-        cart_item.quantity += 1
-        cart_item.save()
+        cart_product.quantity += 1
+        cart_product.save()
 
+    messages.success(request, "Товар добавлен в корзину.")
     return redirect('cart')
 
 def view_cart(request):
-    cart_items = Cart.objects.filter(user=request.user)
-    total_price = sum(item.total_price() for item in cart_items)
-    return render(request, 'olx/cart.html', {'cart_items': cart_items, 'total_price': total_price})
+    user = request.user  # Получаем текущего пользователя
+    cart_products = Cart.objects.filter(user=user)
+    total_price = sum(item.total_price() for item in cart_products)
+    
+    return render(request, 'olx/cart.html', {'cart_products': cart_products, 'total_price': total_price})
 
 def remove_from_cart(request, id):
-    cart_item = Product.objects.get(user=request.user, id=id)
-    cart_item.delete()
+    user = request.user  # Получаем текущего пользователя
+    cart_product = get_object_or_404(Cart, user=user, id=id)
+    cart_product.delete()
+    
+    messages.success(request, "Товар удалён из корзины.")
     return redirect('cart')
 
 def update_cart(request, id):
-    cart_item = Product.objects.get(user=request.user, id=id)
+    user = request.user  # Получаем текущего пользователя
+    cart_product = get_object_or_404(Cart, user=user, id=id)
+    
     if request.method == "POST":
-        quantity = int(request.POST['quantity'])
+        quantity = int(request.POST.get('quantity', 1))
+        
         if quantity > 0:
-            cart_item.quantity = quantity
-            cart_item.save()
+            cart_product.quantity = quantity
+            cart_product.save()
+            messages.success(request, "Количество обновлено.")
         else:
-            cart_item.delete()
+            cart_product.delete()
+            messages.success(request, "Товар удалён из корзины.")
+    
     return redirect('cart')
 
-def add_favorites(request, id):
+def add_favorites(request):
     product = Product.objects.get(id=id)
     user = Profile.objects.get(user=request.user)
     product, created = Favorite.objects.get_or_create(user=request.user, product=product)
     return render(request, 'olx/favorites.html', {'product':product, 'user':user})
 
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from .models import Profile
-from .forms import ProfileForm
-
-@login_required
 def update_profile(request):
     profile = Profile.objects.get(user=request.user)
 

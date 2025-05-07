@@ -7,14 +7,27 @@
 
 {% block content %}
 <h2>Ваша корзина</h2>
-{% for item in cart_items %}
-    <p>{{ item.product.name }} - {{ item.quantity }} шт. ({{ item.total_price }} сум)</p>
-    <form action="{% url 'update_cart' item.product.id %}" method="post">
-        {% csrf_token %}
-        <input type="number" name="quantity" value="{{ item.quantity }}" min="1">
-        <button type="submit">Обновить</button>
-    </form>
-    <a href="{% url 'remove_from_cart' item.product.id %}">Удалить</a>
-{% endfor %}
-<p><strong>Итого: {{ total_price }} сум</strong></p>
+    <div class="products-grid" style="display: flex;">
+        {% for item in cart_products %}
+                <div class="product-card">
+                    {% if item.product.image %}
+                        <img src="{{ item.product.image.url }}" alt="" class="product-image">
+                    {% else %}
+                        <img src="{% static 'img/zaglushka.jpg' %}" alt="Нет изображения" class="product-image">
+                    {% endif %}
+                    <div class="product-name">{{ item.product.title }}</div>
+                    <div class="product-description">{{ item.product.text|truncatechars:60 }}</div>
+                    <div class="product-time">{{ item.product.date|timesince }} назад</div>
+                    <a href="{% url 'product_detail' item.product.id %}"><div class="product-price">{{ item.product.price }} сум</div></a>
+                    <form method="post" action="{% url 'update_cart' item.id %}">
+                        {% csrf_token %}
+                        <input type="number" class="form-control" name="quantity" value="{{ item.quantity }}" min="1">
+                        <button type="submit">Обновить</button>
+                    </form>
+                    <h5>{{ item.total_price }}</h5>
+                    <a href="{% url 'remove_from_cart' item.id %}"><button class="btn btn-danger">Удалить</button></a>
+                </div>
+        {% endfor %}
+    </div>
+<h3>Итого: {{ total_price }}</h3>
 {% endblock %}

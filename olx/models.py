@@ -44,6 +44,7 @@ class Product(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='Пользователь')
     name = models.CharField('Имя', max_length=255)
+    avatar = models.ImageField('Фото профиля', upload_to='avatars/', default='avatars/default.jpg')
     bio = models.TextField(blank=True, null=True)
     location = models.CharField('Местонахождение', max_length=100, default='Не указано')
 
