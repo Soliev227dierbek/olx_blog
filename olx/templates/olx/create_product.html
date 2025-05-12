@@ -6,26 +6,28 @@ Create new post
 {% endblock %}
 
 {% block content %}
-<form action="{% url 'create' %}" method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    <p>
-        <label for="title">title</label>
-        <input type="text" class="form-control" id="title" name="title" placeholder="title">
-    </p>
-    <p>
-        <label for="price">price</label>
-        <input type="number" class="form-control" id="price" name="price" placeholder="price" required>
-    </p>
-    <p>
-        <label for="text">text</label>
-        <input type="text" class="form-control" id="text" name="text" placeholder="text" required>
-    </p>
-    <p>
-        <div class="mb-3">
-            <label for="formFile" class="form-label">image</label>
-            <input class="form-control" type="file" id="image" name="image" placeholder="image" required>
-        </div>
-    </p>
-    <button class="btn btn-primary">Create</button>
-</form>
+<div class="create-card-div" style="background: white;">
+    <form action="{% url 'create' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p>
+            <label for="title">Title</label>
+            <input type="text" class="form-control" class="form-control-create" id="title" name="title" placeholder="title">
+        </p>
+        <p>
+            <label for="price">price</label>
+            <input type="number" class="form-control" class="form-control-create" id="price" name="price" placeholder="price" required>
+        </p>
+        <p>
+            <label for="text">text</label>
+            <input type="text" class="form-control" class="form-control-create" id="text" name="text" placeholder="text" required>
+        </p>
+        <p>
+            <div class="mb-3">
+                <label for="formFile" class="form-label"><h5 style="margin: 10px;">Image</h5></label>
+                <input class="form-control" class="form-control-create" type="file" id="image" name="image" placeholder="image" required>
+            </div>
+        </p>
+        <button class="btn btn-primary" class="btn" style="height: 40px; margin: 10px; width: 240px;">Create</button>
+    </form>
+</div>
 {% endblock %}

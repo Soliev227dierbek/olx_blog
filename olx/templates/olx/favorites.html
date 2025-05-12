@@ -6,6 +6,19 @@
 {% endblock %}
 
 {% block content %}
-Любимые товары - {{ profile.name }}
-{% endfor %}
+<h2>Избранные товары</h2>
+<div style="display: flex; flex-wrap: wrap;">
+    {% for item in favorites %}
+        <div style="border: 1px solid #ccc; padding: 10px; margin: 10px;">
+            <h4>{{ item.product.title }}</h4>
+            <p>{{ item.product.description|truncatechars:50 }}</p>
+            <p>{{ item.product.price }} сум</p>
+            <a href="{% url 'remove_from_favorites' item.product.id %}">
+                <button>Удалить из избранного</button>
+            </a>
+        </div>
+    {% empty %}
+        <p>Нет избранных товаров.</p>
+    {% endfor %}
+</div>
 {% endblock %}

@@ -15,7 +15,13 @@
 <div class="card-group">
     {% for category in categories %}
     <div class="category">
-    <a href="{% url 'categories' %}" style="text-decoration: none;"><h2>{{ category.name }}</h2></a>
+    <a href="{% url 'categories' %}" style="text-decoration: none;">
+        {% if category.image %}
+            <img src="{{ category.image.url }}" alt="" class="img-category">
+        {% else %}
+            <img src="{% static 'img/icons8-добавить-в-корзину-48.png' %}" alt="">
+        {% endif %}
+        <h2>{{ category.name }}</h2></a>
         <ul>
             {% for subcategory in category.subcategories.all %}
 
@@ -32,31 +38,12 @@
             {% else %}
                 <img src="{% static 'img/zaglushka.jpg' %}" alt="Нет изображения" class="product-image">
             {% endif %}
-            <div class="product-name">{{ product.title }}</div>
-            <div class="product-description">{{ product.text|truncatechars:60 }}</div>
+            <div class="product-name" style="margin-left: 5px;">{{ product.title }}</div>
+            <div class="product-description" style="margin-left: 5px;">{{ product.text|truncatechars:60 }}</div>
             <div class="product-time">{{ product.date|timesince }} назад</div>
             <a href="{% url 'product_detail' id=product.id %}"><div class="product-price">{{ product.price }} сум</div></a>
             <div class="cart-icon"><a href="{% url 'add_to_cart' product.id %}">🛒</a></div>
         </div>
     {% endfor %}
   </div>
-    <ul class="pagination" style="padding: 10px;">
-      <li class="page-item">
-        {% if products.has_previous %}
-        <a class="page-link" href="?page={{ products.previous_page_number }}" aria-label="Previous">
-          <span aria-hidden="true">&laquo;</span>
-        </a>
-        {% endif %}
-      </li>
-      <li class="page-item"><a class="page-link" href="">1</a></li>
-      <li class="page-item"><a class="page-link" href="#">2</a></li>
-      <li class="page-item"><a class="page-link" href="#">3</a></li>
-      <li class="page-item">
-        {% if products.has_next %}
-        <a class="page-link" href="?page={{ products.next_page_number }}" aria-label="Next">
-          <span aria-hidden="true">&raquo;</span>
-        </a>
-        {% endif %}
-      </li>
-    </ul>
 {% endblock %}

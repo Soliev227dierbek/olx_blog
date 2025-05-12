@@ -27,7 +27,7 @@ class RegisterForm(UserCreationForm):
 class ProfileForm(forms.ModelForm):
     name = forms.CharField(label="Имя", required=True, widget=forms.TextInput(attrs={'class' : 'form-control footer-input margin-b-20'}))
     avatar = forms.ImageField(label="Аватар", required=True,widget=forms.ClearableFileInput(attrs={'class' : 'form-control footer-input margin-b-20'}))
-    bio = forms.CharField(label="Биография", required=True, widget=forms.Textarea(attrs={'class' : 'form-control footer-input margin-b-20'}))
+    bio = forms.CharField(label="Биография", required=True, widget=forms.Textarea(attrs={'class' : 'form-control footer-input margin-b-20, margin-left: 20px;'}))
     location = forms.CharField(label="Локация", required=True, widget=forms.TextInput(attrs={'class' : 'form-control footer-input margin-b-20'}))
 
     class Meta:
@@ -35,7 +35,7 @@ class ProfileForm(forms.ModelForm):
         fields = ("name", "avatar", "bio", "location")
 
     def delete_profile(self):
-        if self.instance:  # Проверяем, есть ли профиль
-            user = self.instance.user  # Получаем пользователя
-            self.instance.delete()  # Удаляем профиль
-            user.delete()  # Удаляем пользователя
+        if self.instance:
+            user = self.instance.user
+            self.instance.delete()
+            user.delete()

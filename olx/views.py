@@ -10,12 +10,8 @@ from django.contrib.auth import authenticate, login, logout
 
 def index(request):
     products = Product.objects.all()
-    paginator = Paginator(products, 2)
     categories = Category.objects.all()
-
-    page = request.GET.get('page')
-    products_on_page = paginator.get_page(page)
-    return render(request, 'olx/index.html', {'products':products_on_page, 'categories':categories})
+    return render(request, 'olx/index.html', {'products':products, 'categories':categories})
 
 def product_detail(request, id):
     product = Product.objects.get(id=id)
@@ -124,55 +120,31 @@ def subcategories(request, id):
     subcategory = Subcategory.objects.get(id=id)
     return render(request, 'olx/subcategory.html', {'subcategory': subcategory})
 
+def cart_view(request):
+    cart_items = Cart.objects.filter(user=request.user)
+    total_price = sum(item.total_price() for item in cart_items)
+    return render(request, 'olx/cart.html', {'cart_items': cart_items,'total_price': total_price})
+
 def add_to_cart(request, id):
-    product = get_object_or_404(Product, id=id)
-    user = request.user  # Получаем текущего пользователя
-    cart_product, created = Cart.objects.get_or_create(user=user, product=product)
-    
-    if not created:
-        cart_product.quantity += 1
-        cart_product.save()
+    product = Product.objects.get(id=id)
+    item, created = Cart.objects.get_or_create(user=request.user, product=product)
+    item.quantity += 1
+    item.save()
+    return redirect('cart_view')
 
-    messages.success(request, "Товар добавлен в корзину.")
-    return redirect('cart')
-
-def view_cart(request):
-    user = request.user  # Получаем текущего пользователя
-    cart_products = Cart.objects.filter(user=user)
-    total_price = sum(item.total_price() for item in cart_products)
-    
-    return render(request, 'olx/cart.html', {'cart_products': cart_products, 'total_price': total_price})
+def decrease_quantity(request, id):
+    item = get_object_or_404(Cart, id=id, user=request.user)
+    if item.quantity > 1:
+        item.quantity -= 1
+        item.save()
+    else:
+        item.delete()  # если количество 1 и нажали "−", удалить из корзины
+    return redirect('cart_view')
 
 def remove_from_cart(request, id):
-    user = request.user  # Получаем текущего пользователя
-    cart_product = get_object_or_404(Cart, user=user, id=id)
-    cart_product.delete()
-    
-    messages.success(request, "Товар удалён из корзины.")
-    return redirect('cart')
-
-def update_cart(request, id):
-    user = request.user  # Получаем текущего пользователя
-    cart_product = get_object_or_404(Cart, user=user, id=id)
-    
-    if request.method == "POST":
-        quantity = int(request.POST.get('quantity', 1))
-        
-        if quantity > 0:
-            cart_product.quantity = quantity
-            cart_product.save()
-            messages.success(request, "Количество обновлено.")
-        else:
-            cart_product.delete()
-            messages.success(request, "Товар удалён из корзины.")
-    
-    return redirect('cart')
-
-def add_favorites(request):
-    product = Product.objects.get(id=id)
-    user = Profile.objects.get(user=request.user)
-    product, created = Favorite.objects.get_or_create(user=request.user, product=product)
-    return render(request, 'olx/favorites.html', {'product':product, 'user':user})
+    item = get_object_or_404(Cart, id=id, user=request.user)
+    item.delete()
+    return redirect('cart_view')
 
 def update_profile(request):
     profile = Profile.objects.get(user=request.user)
@@ -190,3 +162,17 @@ def update_profile(request):
         form = ProfileForm(instance=profile)
 
     return render(request, 'olx/update_profile.html', {'form': form, 'profile': profile})
+
+def add_to_favorites(request, id):
+    product = Product.objects.get(id=id)
+    Favorite.objects.get_or_create(user=request.user, product=product)
+    return redirect('favorites_list')
+
+def remove_from_favorites(request, id):
+    favorite = Favorite.objects.filter(user=request.user, id=id)
+    favorite.delete()
+    return redirect('favorites_list')
+
+def favorites_list(request):
+    favorites = Favorite.objects.filter(user=request.user)
+    return render(request, 'olx/favorites.html', {'favorites': favorites})

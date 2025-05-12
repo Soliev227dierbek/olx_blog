@@ -47,7 +47,7 @@ body{
 }
 
 .product-card:hover {
-    transform: translateY(+5px);
+    transform: translateY(-5px);
 }
 
 .product-image {
@@ -104,10 +104,6 @@ a{
     padding: 20px;
 }
 
-.d-flex{
-    width: 1000px;
-}
-
 .card-img-top{
     border-radius: 10px 10px 10px 10px;
     border: 2px solid gray;
@@ -115,4 +111,15 @@ a{
 
 .card-title{
     text-align: right;
+}
+
+.form-control-create{
+    margin: 16px;
+    width: 50%;
+}
+
+.img-category{
+    position: absolute;
+    top: 50px;
+    left: 100px;
 }

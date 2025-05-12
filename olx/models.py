@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 
 class Category(models.Model):
     name = models.CharField('Название Категории',max_length=255, unique=True)
+    image = models.ImageField('Иконка', default='None')
 
     def __str__(self):
         return self.name
@@ -44,7 +45,7 @@ class Product(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='Пользователь')
     name = models.CharField('Имя', max_length=255)
-    avatar = models.ImageField('Фото профиля', upload_to='avatars/', default='avatars/default.jpg')
+    avatar = models.ImageField('Фото профиля', upload_to='avatars/')
     bio = models.TextField(blank=True, null=True)
     location = models.CharField('Местонахождение', max_length=100, default='Не указано')
 
@@ -69,6 +70,9 @@ class Favorite(models.Model):
 
     def __str__(self):
         return self.product
+    
+    class Meta:
+        unique_together = ('user', 'product') 
     
 # Create your models here.
 #unique=True в Django означает, что значение этого поля должно быть уникальным среди всех записей в таблице базы данных.

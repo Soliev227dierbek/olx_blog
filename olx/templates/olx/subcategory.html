@@ -6,21 +6,20 @@
 {% endblock %}
 
 {% block content %}
-<div class="card-group">
+<h3 style="margin-left: 18px; margin-top: 18px;">{{ subcategory.name }}</h3>
+<div class="products-grid" style="display: flex;">
     {% for product in subcategory.product_set.all %}
-    <div class="card" style="border-radius: 20px 20px 20px 20px; margin: 10px;">
-        {% if product.image %}
-        <img src="{{product.image.url}}" class="card-img-top" alt="...">
-        {% else %}
-        <img src="{% static 'img/9.png' %}" alt="...">
-        {% endif %}
-        <div class="card-body">
-            <hr>
-            <h5 class="card-title">{{ product.title }}</h5>
-            <p class="card-text">{{ product.text | slice:'0:50'}}...</p>
-            <h5>Цена:</h5><a href="{% url 'product_detail' id=product.id %}" style="text-decoration: none;"><p class="card-price">{{ product.price }} сум</p></a>
+        <div class="product-card">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="" class="product-image">
+            {% else %}
+                <img src="{% static 'img/zaglushka.jpg' %}" alt="Нет изображения" class="product-image">
+            {% endif %}
+            <div class="product-name" style="margin-left: 5px;">{{ product.title }}</div>
+            <div class="product-description" style="margin-left: 5px;">{{ product.text|truncatechars:60 }}</div>
+            <div class="product-time">{{ product.date|timesince }} назад</div>
+            <a href="{% url 'product_detail' id=product.id %}"><div class="product-price">{{ product.price }} сум</div></a>
         </div>
-    </div>
     {% endfor %}
-</div>
+  </div>
 {% endblock %}
