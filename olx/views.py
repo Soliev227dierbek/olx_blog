@@ -104,7 +104,7 @@ def profile(request):
             logout(request)
             return redirect('index')
         else:
-            form = ProfileForm(request.POST, instance=profile)
+            form = ProfileForm(request.POST, request.FILES, instance=profile)
             if form.is_valid():
                 form.save()
                 return redirect('profile')
@@ -165,14 +165,16 @@ def update_profile(request):
 
 def add_to_favorites(request, id):
     product = Product.objects.get(id=id)
-    Favorite.objects.get_or_create(user=request.user, product=product)
-    return redirect('favorites_list')
+    favorite, created = Favorite.objects.get_or_create(user=request.user, product=product)
+    return redirect('favorites')
 
 def remove_from_favorites(request, id):
     favorite = Favorite.objects.filter(user=request.user, id=id)
     favorite.delete()
-    return redirect('favorites_list')
+    return redirect('favorites')
 
 def favorites_list(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
     favorites = Favorite.objects.filter(user=request.user)
     return render(request, 'olx/favorites.html', {'favorites': favorites})

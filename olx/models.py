@@ -53,7 +53,7 @@ class Profile(models.Model):
         return self.user.username
     
 class Cart(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default='None')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
 
@@ -66,10 +66,10 @@ class Cart(models.Model):
 
 class Favorite(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='Пользователь')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
 
     def __str__(self):
-        return self.product
+        return f"{self.user} -> {self.product}"
     
     class Meta:
         unique_together = ('user', 'product') 

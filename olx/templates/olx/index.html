@@ -11,25 +11,23 @@
   <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search">
   <button class="btn btn-outline-success" type="submit">Search</button>
 </form>
-
 <div class="card-group">
     {% for category in categories %}
-    <div class="category">
-    <a href="{% url 'categories' %}" style="text-decoration: none;">
-        {% if category.image %}
-            <img src="{{ category.image.url }}" alt="" class="img-category">
-        {% else %}
-            <img src="{% static 'img/icons8-добавить-в-корзину-48.png' %}" alt="">
-        {% endif %}
-        <h2>{{ category.name }}</h2></a>
-        <ul>
-            {% for subcategory in category.subcategories.all %}
-
-            {% endfor %}
-        </ul>
-    </div>
+        <div class="category-card">
+            <a href="{% url 'categories' %}" style="text-decoration: none;">
+                <div class="category-content">
+                    <ul>
+                        {% for subcategory in category.subcategories.all %}
+                            <!-- если нужно — отобрази подкатегории -->
+                        {% endfor %}
+                    </ul>
+                    <h5 class="category-title">{{ category.name }}</h5>
+                </div>
+            </a>
+        </div>
     {% endfor %}
 </div>
+
   <div class="products-grid" style="display: flex;">
     {% for product in products %}
         <div class="product-card">

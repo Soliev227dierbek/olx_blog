@@ -7,6 +7,31 @@
 
 {% block content %}
 <h2>Избранные товары</h2>
+{% if user.is_authenticated %}
+<div style="display: flex; flex-wrap: wrap;">
+    <div class="products-grid" style="display: flex; flex-wrap: wrap;">
+    {% for item in favorites %}
+        <div class="product-card">
+            {% if item.product.image %}
+                <img src="{{ item.product.image.url }}" alt="" class="product-image" width="150">
+            {% else %}
+                <img src="{% static 'img/zaglushka.jpg' %}" alt="Нет изображения" class="product-image" width="150">
+            {% endif %}
+            <div class="product-name">{{ item.product.title }}</div>
+            <div class="product-description">{{ item.product.text|truncatechars:60 }}</div>
+            <div class="product-time">{{ item.product.date|timesince }} назад</div>
+            <div class="product-price"><a href="{% url 'product_detail' item.product.id %}">{{ item.product.price }} сум</div></a>
+        </div>
+    {% empty %}
+        <p>Нет избранных товаров.</p>
+    {% endfor %}
+    </div>
+</div>
+{% else %}
+    Сперва <a href="{% url 'login' %}">Войдите</a> или <a href="{% url 'register' %}">Зарегистрируйтесь.</a>
+{% endif %}
+{% endblock %}
+<h2>Избранные товары</h2>
 <div style="display: flex; flex-wrap: wrap;">
     {% for item in favorites %}
         <div style="border: 1px solid #ccc; padding: 10px; margin: 10px;">
@@ -21,4 +46,3 @@
         <p>Нет избранных товаров.</p>
     {% endfor %}
 </div>
-{% endblock %}

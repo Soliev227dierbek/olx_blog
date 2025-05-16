@@ -6,7 +6,7 @@ Login
 {% endblock %}
 
 {% block content %}
-<div class="col-md-8 offset-md-2">
+<div class="login">
     <form action="{% url 'login' %}" method="POST">
         {% csrf_token %}
         {% if error %}
@@ -17,11 +17,11 @@ Login
             <input type="text" class="form-control" name="username" id="username" placeholder="username">
             <label for="username">Username</label>
         </div>
-        <div class="form-floating">
+        <div class="form-floating" style="padding-top: 10px;">
             <input type="password" class="form-control" name="password" id="password" placeholder="password">
             <label for="password">Password</label>
         </div>
-        <button class="w-50 btn btn-success">Sign in</button>
+        <button class="w-50 btn btn-success" style="padding-top: 10px;">Sign in</button>
     </form>
 </div>
 {% endblock %}

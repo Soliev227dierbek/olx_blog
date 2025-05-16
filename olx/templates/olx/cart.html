@@ -6,7 +6,8 @@
 {% endblock %}
 
 {% block content %}
-<h2 style="margin-top: 10px; margin-left: 10px;">Ваша корзина</h2>
+<div class="cart-div">
+<h2 style="padding-left: 10px; padding-top: 10px; padding-bottom: -20px;">Ваша корзина</h2>
 <div class="products-grid" style="display: flex; flex-wrap: wrap;">
     {% for item in cart_items %}
         <div class="product-card">
@@ -20,7 +21,8 @@
             <div class="product-time">{{ item.product.date|timesince }} назад</div>
             <div class="product-price">{{ item.product.price }} сум</div>
 
-            <div style="margin-top: 10px;">
+            <h5>Всего: {{ item.total_price }} сум</h5>
+            <div style="margin: 10px;">
                 <a href="{% url 'decrease_quantity' item.id %}">
                     <button class="btn btn-primary">-</button>
                 </a>
@@ -29,18 +31,17 @@
                     <button class="btn btn-primary">+</button>
                 </a>
             </div>
-
-            <h5>Всего: {{ item.total_price }} сум</h5>
-
-            <a href="{% url 'remove_from_cart' item.id %}">
+            <a href="{% url 'remove_from_cart' item.id %}" style="margin: 10px; margin-bottom: 10px;">
                 <button class="btn btn-danger">Удалить</button>
             </a>
         </div>
+        
     {% empty %}
         <p>Ваша корзина пуста.</p>
     {% endfor %}
 </div>
 
-<h6>Итого:</h6>
-<h3>{{ total_price }} сум</h3>
+<h6 style="margin-left: 10px;">Итого:</h6>
+<h3 style="color: rgb(22, 104, 22); margin-left: 10px; margin-bottom: 10px;">{{ total_price }} <small style="color: black;">сум</small></h3>
+</div>
 {% endblock %}

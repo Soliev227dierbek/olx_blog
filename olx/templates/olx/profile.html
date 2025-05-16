@@ -10,7 +10,7 @@
     {% if profile.name and profile.bio and profile.location and profile.avatar %}
         <div class="card" style="padding: 16px;">
             {% if user.profile.avatar %}
-                <img src="{{ user.profile.avatar.url }}" alt="Avatar">
+                <img src="{{ user.profile.avatar.url }}" alt="Avatar" class="profile-avatar" style="width: 100px; height: 100px;">
             {% else %}
                 <p>Нет аватарки</p>
             {% endif %}
@@ -45,11 +45,13 @@
             
         </div>
     {% else %}
-        <h2>Создайте Профиль</h2>
-        <hr>
-
+    <h2>Создайте Профиль</h2>
+    <hr>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
         {{ form.as_p }}
 
         <button type="submit">Сохранить</button>
+    </form>
     {% endif %}
 {% endblock %}
