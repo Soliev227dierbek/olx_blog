@@ -6,6 +6,24 @@
 {% endblock %}
 
 {% block content %}
+<div class="products-grid" style="padding: 10px; display: flex; background: white; border-radius: 20px 20px 20px 20px; margin: 20px; flex-direction: column;"><h1>Поиск по запросу: {{ query }}</h1>
+    {% for product in search_obj %}
+        <div class="product-card">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="" class="product-image">
+            {% else %}
+                <img src="{% static 'img/zaglushka.jpg' %}" alt="Нет изображения" class="product-image">
+            {% endif %}
+            <div class="product-name" style="margin-left: 5px;">{{ product.title }}</div>
+            <div class="product-description" style="margin-left: 5px;">{{ product.text|truncatechars:60 }}</div>
+            <div class="product-time">{{ product.date|timesince }} назад</div>
+            <a href="{% url 'product_detail' id=product.id %}"><div class="product-price">{{ product.price }} сум</div></a>
+            <div class="cart-icon"><a href="{% url 'add_to_cart' product.id %}">🛒</a></div>
+        </div>
+    {% endfor %}
+    </div>
+</div>
+{% endblock %}
 <h1>Поиск по запросу: {{ query }}</h1>
 <div class="card-group">
     {% for product in search_obj %}
@@ -26,4 +44,3 @@
     <h2>По вашему запросу: {{ query }}, ничего не найдено</h2>
     {% endfor %}
 </div>
-{% endblock %}

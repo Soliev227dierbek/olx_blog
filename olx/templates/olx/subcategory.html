@@ -6,8 +6,8 @@
 {% endblock %}
 
 {% block content %}
-<h3 style="margin-left: 18px; margin-top: 18px;">{{ subcategory.name }}</h3>
-<div class="products-grid" style="display: flex;">
+<div class="products-grid" style="display: flex; margin: 18px; background: white; border-radius: 20px 20px 20px 20px; flex-direction: column;">
+    <h3 style="padding: 15px;">{{ subcategory.name }}</h3>
     {% for product in subcategory.product_set.all %}
         <div class="product-card">
             {% if product.image %}
@@ -21,5 +21,5 @@
             <a href="{% url 'product_detail' id=product.id %}"><div class="product-price">{{ product.price }} сум</div></a>
         </div>
     {% endfor %}
-  </div>
+</div>
 {% endblock %}

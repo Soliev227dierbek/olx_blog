@@ -6,52 +6,41 @@
 {% endblock %}
 
 {% block content %}
-    {% csrf_token %}
-    {% if profile.name and profile.bio and profile.location and profile.avatar %}
-        <div class="card" style="padding: 16px;">
-            {% if user.profile.avatar %}
-                <img src="{{ user.profile.avatar.url }}" alt="Avatar" class="profile-avatar" style="width: 100px; height: 100px;">
-            {% else %}
-                <p>Нет аватарки</p>
-            {% endif %}
-            {% if profile.name %}
-                <h5>{{ profile.name }}</h5>
-            {% else %}
-                <h5>Не указано</h5>
-            {% endif %}
-            <hr>
-            Биография:
-            {% if profile.bio %}
-                <h6>{{ profile.bio }}</h6>
-            {% else %}
-                <h6>Нет биографии</h6>
-            {% endif %}
-            <hr>
-            Локация:
-            {% if profile.location %}
-                <h6>{{ profile.location }}</h6>
-            {% else %}
-                <h6>Не указано</h6>
-            {% endif %}
-            <form method="POST">
-                {% csrf_token %}
-                <button class="button" type="submit" name="delete_profile" style="background-color: red; color: white;">
-                    Удалить профиль и аккаунт
-                </button>
-            </form>
-            <form action="{% url 'update_profile' %}">
-                <button class="btn btn-danger">Редактировать</button>
-            </form>
-            
-        </div>
+<div class="card" style="padding: 16px; margin: 20px; border-radius: 20px 20px 20px 20px;">
+
+    {% if user.profile.avatar %}
+        <img src="{{ user.profile.avatar.url }}" alt="Avatar" class="profile-avatar" style="width: 100px; height: 100px;">
     {% else %}
-    <h2>Создайте Профиль</h2>
+        <p>Нет аватарки</p>
+    {% endif %}
+
+    <h5>{{ profile.name|default:"Не указано" }}</h5>
     <hr>
+
+    <strong>Биография:</strong>
+    <p>{{ profile.bio|default:"Нет биографии" }}</p>
+    <hr>
+
+    <strong>Локация:</strong>
+    <p>{{ profile.location|default:"Не указано" }}</p>
+
+    <form method="POST" style="margin-top: 16px;">
+        {% csrf_token %}
+        <button class="btn btn-danger" type="submit" name="delete_profile">Удалить профиль и аккаунт</button>
+    </form>
+
+    <a href="{% url 'update_profile' %}" class="btn btn-primary" style="margin-top: 10px;">Редактировать</a>
+
+</div>
+
+{% if not profile.name or not profile.bio or not profile.location or not profile.avatar %}
+    <hr>
+    <h3>Заполните ваш профиль:</h3>
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-
-        <button type="submit">Сохранить</button>
+        <button type="submit" class="btn btn-success">Сохранить</button>
     </form>
-    {% endif %}
+{% endif %}
+
 {% endblock %}

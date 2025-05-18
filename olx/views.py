@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Product, Profile, Category, Subcategory, Cart, Favorite
 from django.core.paginator import Paginator
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from .forms import RegisterForm, ProfileForm
 from django.core.files.storage import FileSystemStorage
@@ -59,48 +60,52 @@ def delete(request, id):
         return redirect('index')
     return redirect('index')
 
+# Регистрация пользователя
 def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
-            Profile.objects.create(user=user)
+            Profile.objects.get_or_create(user=user)
             return redirect('index')
     else:
         form = RegisterForm()
-    return render(request, 'olx/register.html', {'form':form})
+    return render(request, 'olx/register.html', {'form': form})
 
+# Авторизация
 def login_site(request):
-    if not request.user.is_authenticated:
-        if request.method == 'POST':
-            username = request.POST['username']
-            password = request.POST['password']
-            user_exists = User.objects.filter(username=username).exists()
-            if not user_exists:
-                return render(request, 'olx/login.html', {'error': 'Аккаунт удален или не существует'})
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect('index')
-            else:
-                return render(request, 'olx/login.html', {'error': 'Неверные данные'})
-        return render(request, 'olx/login.html')
-    return redirect('index')
-    
-def logout_site(request):
     if request.user.is_authenticated:
-        logout(request)
+        return redirect('index')
+
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('index')
+        else:
+            return render(request, 'olx/login.html', {
+                'error': 'Неверное имя пользователя или пароль'
+            })
+
+    return render(request, 'olx/login.html')
+
+# Выход из аккаунта
+@login_required
+def logout_site(request):
+    logout(request)
     return redirect('index')
 
+# Профиль пользователя
+@login_required
 def profile(request):
-    if not request.user.is_authenticated:
-        return redirect('login')
-    profile, created = Profile.objects.get_or_create(user=request.user) 
+    profile, _ = Profile.objects.get_or_create(user=request.user)
+
     if request.method == "POST":
         if "delete_profile" in request.POST:
-            user = request.user
-            profile.delete()
-            user.delete()
+            request.user.delete()
             logout(request)
             return redirect('index')
         else:
@@ -110,7 +115,12 @@ def profile(request):
                 return redirect('profile')
     else:
         form = ProfileForm(instance=profile)
-    return render(request, 'olx/profile.html', {'profile': profile, 'form': form})
+
+    return render(request, 'olx/profile.html', {
+        'profile': profile,
+        'form': form
+    })
+
     
 def categories(request):
     categories = Category.objects.prefetch_related('subcategories').all()
@@ -120,61 +130,80 @@ def subcategories(request, id):
     subcategory = Subcategory.objects.get(id=id)
     return render(request, 'olx/subcategory.html', {'subcategory': subcategory})
 
+# Просмотр корзины
+@login_required
 def cart_view(request):
     cart_items = Cart.objects.filter(user=request.user)
-    total_price = sum(item.total_price() for item in cart_items)
-    return render(request, 'olx/cart.html', {'cart_items': cart_items,'total_price': total_price})
+    total_price = sum(item.total_price() for item in cart_items)  # Убедись, что метод total_price есть в модели Cart
+    return render(request, 'olx/cart.html', {
+        'cart_items': cart_items,
+        'total_price': total_price
+    })
 
+# Добавить товар в корзину
+@login_required
 def add_to_cart(request, id):
-    product = Product.objects.get(id=id)
+    product = get_object_or_404(Product, id=id)
     item, created = Cart.objects.get_or_create(user=request.user, product=product)
     item.quantity += 1
     item.save()
     return redirect('cart_view')
 
+# Уменьшить количество товара в корзине
+@login_required
 def decrease_quantity(request, id):
     item = get_object_or_404(Cart, id=id, user=request.user)
     if item.quantity > 1:
         item.quantity -= 1
         item.save()
     else:
-        item.delete()  # если количество 1 и нажали "−", удалить из корзины
+        item.delete()  # Удалить, если количество становится 0
     return redirect('cart_view')
 
+# Удалить товар из корзины
+@login_required
 def remove_from_cart(request, id):
     item = get_object_or_404(Cart, id=id, user=request.user)
     item.delete()
     return redirect('cart_view')
 
+# Обновление профиля пользователя
+@login_required
 def update_profile(request):
-    profile = Profile.objects.get(user=request.user)
+    profile = get_object_or_404(Profile, user=request.user)
 
     if request.method == 'POST':
-        # Если данные были отправлены с формы
-        form = ProfileForm(request.POST, instance=profile)
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
-            # Сохраняем обновленные данные профиля
             form.save()
-            return redirect('profile')  # Перенаправляем на страницу профиля после успешного обновления
-
+            return redirect('profile')  # Перенаправление после сохранения
     else:
-        # Если метод GET, то передаем текущие данные в форму для отображения
         form = ProfileForm(instance=profile)
 
-    return render(request, 'olx/update_profile.html', {'form': form, 'profile': profile})
+    return render(request, 'olx/update_profile.html', {
+        'form': form,
+        'profile': profile
+    })
 
+# Добавить товар в избранное
+@login_required
 def add_to_favorites(request, id):
-    product = Product.objects.get(id=id)
-    favorite, created = Favorite.objects.get_or_create(user=request.user, product=product)
+    product = get_object_or_404(Product, id=id)
+    Favorite.objects.get_or_create(user=request.user, product=product)
     return redirect('favorites')
 
+# Удалить товар из избранного
+@login_required
 def remove_from_favorites(request, id):
-    favorite = Favorite.objects.filter(user=request.user, id=id)
+    product = get_object_or_404(Product, id=id)
+    favorite = Favorite.objects.filter(user=request.user, product=product)
     favorite.delete()
     return redirect('favorites')
 
+# Просмотр списка избранных товаров
+@login_required
 def favorites_list(request):
-    if not request.user.is_authenticated:
-        return redirect('login')
     favorites = Favorite.objects.filter(user=request.user)
-    return render(request, 'olx/favorites.html', {'favorites': favorites})
+    return render(request, 'olx/favorites.html', {
+        'favorites': favorites
+    })

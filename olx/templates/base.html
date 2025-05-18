@@ -37,7 +37,11 @@
                         <a class="nav-link active" href="{% url 'favorites' %}" style="color: white;">Избранные</a>   
                     </li>
                 </ul>
-                <a href="{% url 'create' %}"><button class="btn btn-primary" style="margin-right: 10px;">+ New product</button></a>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'create' %}"><button class="btn btn-primary" style="margin-right: 10px;">+ New product</button></a>
+                {% else %}
+
+                {% endif %}
                 {% if user.is_authenticated %}
                     <a href="{% url 'profile' %}" class="btn btn-primary">Профиль</a>
                 {% else %}

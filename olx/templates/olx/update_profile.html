@@ -1,49 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}
-Профиль
-{% endblock %}
-
 {% block content %}
-<form method="POST" action="" enctype="multipart/form-data" style="padding: 16px;">
+<h2>Редактирование профиля</h2>
+<form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    {% if profile.name and profile.bio and profile.location %}
-        <div class="card">
-            <h3>Редактировать Профиль</h3>
-            <hr>
-            <label for="name">Фото пользователя:</label>
-            <div class="mb-3">
-                <label for="formFile" class="form-label">image</label>
-                <input class="form-control" type="file" id="image" name="image" placeholder="image" required>
-            </div>
-            <label for="name">Имя пользователя:</label>
-            <input type="text" id="name" name="name" value="{{ profile.name }}">
-            <hr>
-            <label for="bio">Биография:</label>
-            <textarea id="bio" name="bio">{{ profile.bio }}</textarea>
-            <hr>
-            <label for="location">Локация:</label>
-            <input type="text" id="location" name="location" value="{{ profile.location }}">
-            <hr>
-            
-            <button type="submit" name="update_profile">Сохранить изменения</button>
-        </div>
-        
-        <form method="POST">
-            {% csrf_token %}
-            <button class="btn btn-danger" type="submit" name="delete_profile">
-                Удалить профиль и аккаунт
-            </button>
-        </form>
-        
-    {% else %}
-        <h2>Создайте Профиль</h2>
-        <hr>
-
-        {{ form.as_p }}
-
-        <button type="submit" class="btn btn-primary">Сохранить</button>
-    {% endif %}
+    {{ form.as_p }}
+    <button type="submit">Сохранить</button>
 </form>
 {% endblock %}

@@ -17,7 +17,7 @@
         <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="heading{{ forloop.counter }}" data-bs-parent="#accordionExample">
           <div class="accordion-body">
             {% for subcategory in category.subcategories.all %}
-              <a href="{% url 'subcategories' id=subcategory.id %}" style="color: black;">{{ subcategory.name }}</a><br><hr>
+              <a href="{% url 'subcategories' id=subcategory.id %}" style="color: black; padding-top: 20px;">{{ subcategory.name }}</a><br>
             {% empty %}
               <p>Нет подкатегорий</p>
             {% endfor %}
