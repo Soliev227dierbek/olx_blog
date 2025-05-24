@@ -6,8 +6,8 @@ Create new post
 {% endblock %}
 
 {% block content %}
-<div class="create-card-div" style="background: rgb(255, 255, 255); margin: 10px; border-radius: 10px; width: 1060px;">
-    <form action="{% url 'create' %}" method="POST" enctype="multipart/form-data">
+<div class="create-card-div" style="background: rgb(255, 255, 255); margin: 10px; border-radius: 10px; width: 1060px; align-items: center; justify-content: center;">
+    <form action="{% url 'create' %}" method="POST" enctype="multipart/form-data" class="form-create">
         {% csrf_token %}
         <p>
             <label for="title"><h3 style="margin-top: -30px; margin-left: 10px;">Title</h3></label>

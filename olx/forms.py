@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from django.contrib.auth.models import User
-from .models import Profile
+from .models import Profile, Review
 class RegisterForm(UserCreationForm):
     username = forms.CharField(label="Никнейм", required=True, widget=forms.TextInput(attrs={'class' : 'form-control footer-input margin-b-20'}))
     password1 = forms.CharField(label="Пароль", required=True, widget=forms.PasswordInput(attrs={'class' : 'form-control footer-input margin-b-20'}))
@@ -39,3 +39,18 @@ class ProfileForm(forms.ModelForm):
             user = self.instance.user
             self.instance.delete()
             user.delete()
+
+class ReviewForm(forms.ModelForm):
+    RATING_CHOICES = [(i, str(i)) for i in range(1, 6)]
+
+    rating = forms.ChoiceField(
+        choices=RATING_CHOICES,
+        widget=forms.RadioSelect
+    )
+
+    class Meta:
+        model = Review
+        fields = ['rating', 'comment']
+        widgets = {
+            'comment': forms.Textarea(attrs={'class': 'form-control my-2', 'rows': 4}),
+        }

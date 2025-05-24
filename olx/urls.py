@@ -22,4 +22,5 @@ urlpatterns = [
     path('favorites/', views.favorites_list, name='favorites'),
     path('favorites/add/<int:id>/', views.add_to_favorites, name='add_to_favorites'),
     path('favorites/remove/<int:id>/', views.remove_from_favorites, name='remove_from_favorites'),
+    path('product/<int:id>/review/', views.add_review, name='add_review'),
 ]

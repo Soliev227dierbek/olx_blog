@@ -13,7 +13,7 @@
 </form>
 <div class="card-group">
     {% for category in categories %}
-        <div class="category-card">
+        <div class="category-card" style="margin-left: 20px; gap: 10px;">
             <a href="{% url 'categories' %}" style="text-decoration: none;">
                 <div class="category-content">
                     <ul>
@@ -28,7 +28,7 @@
     {% endfor %}
 </div>
 
-  <div class="products-grid" style="display: flex;">
+  <div class="products-grid">
     {% for product in products %}
         <div class="product-card">
             {% if product.image %}

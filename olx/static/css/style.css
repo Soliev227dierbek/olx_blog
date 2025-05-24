@@ -32,26 +32,22 @@ body{
 
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 1px;
-    flex-wrap: wrap;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px; /* расстояние между карточками */
+    padding: 20px;
 }
 
 .product-card {
-    background-color: #fff;
+    width: 220px;
+    height: 300px;
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    transition: transform 0.2s;
-    width: 200px;
-    padding: 0px;
-    margin: 20px;
-    height: 400px;
     background-color: white;
     overflow: hidden;
+    transition: transform 0.2s;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 10px;
+    padding: 0px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
@@ -135,17 +131,18 @@ a{
     align-items: center;     /* по вертикали */
 }
 
-.product-card {
-    width: 200px;
-    height: 300px;
+.form-container {
+    background: white;
+    padding: 40px 30px;
     border-radius: 12px;
-    background-color: white;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 0px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 500px;
+  }
+
+.form-create{
+    justify-content: center; /* центр по горизонтали */
+    align-items: center;     /* центр по вертикали */
 }
 
 .product-image {

@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Добавить отзыв
+{% endblock %}
+
+{% block content %}
+
+<a href="{% url 'product_detail' product.id %}" class="btn btn-primary" style="margin-left: 10px; margin-top: 10px;">←</a>
+
+<div class="review-div" style="background: white; border-radius: 20px 20px 20px 20px; margin: 20px;"><h2 style="margin-left: 10px; margin-top: 10px;">Оставить отзыв о продукте: {{ product.name }}</h2>
+
+<form method="post">
+    {% csrf_token %}
+
+    <label><h6 style="margin-left: 10px;">Оценка:</h6></label>
+    <div class="rating-stars">
+        {% for radio in form.rating %}
+            <div class="star-item" style="margin-left: 10px;">
+                <label for="{{ radio.id_for_label }}">
+                    {{ radio.tag }}
+                    <span class="star">★</span>
+                </label>
+                <div class="rating-number">{{ radio.choice_label }}</div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <br>
+
+    <h6 style="margin-left: 10px;">{{ form.comment.label_tag }}</h6>
+    <div style="margin-left: 10px; margin-right: 10px; width: 500px;">{{ form.comment }}</div>
+
+    <button type="submit" class="btn btn-primary" style="margin: 20px;">Отправить отзыв</button>
+</form>
+
+<style>
+.rating-stars {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+.star-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.rating-stars input[type="radio"] {
+    display: none;
+}
+
+.rating-stars label {
+    cursor: pointer;
+    font-size: 2rem;
+    color: #ccc;
+}
+
+.rating-stars input[type="radio"]:checked + .star,
+.rating-stars label:hover .star,
+.rating-stars label:hover ~ label .star {
+    color: gold;
+}
+
+.rating-number {
+    font-size: 0.9rem;
+    color: black;
+}
+</style>
+</div>
+{% endblock %}

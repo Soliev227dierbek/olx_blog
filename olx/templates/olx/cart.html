@@ -16,7 +16,7 @@
             {% else %}
                 <img src="{% static 'img/zaglushka.jpg' %}" alt="Нет изображения" class="product-image" width="150">
             {% endif %}
-            <div class="product-name">{{ item.product.title }}</div>
+            <div class="product-name" style="height: 50px;">{{ item.product.title }}</div>
             <div class="product-description">{{ item.product.text|truncatechars:60 }}</div>
             <div class="product-time">{{ item.product.date|timesince }} назад</div>
             <div class="product-price">{{ item.product.price }} сум</div>

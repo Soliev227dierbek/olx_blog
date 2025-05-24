@@ -73,6 +73,18 @@ class Favorite(models.Model):
     
     class Meta:
         unique_together = ('user', 'product') 
+
+class Review(models.Model):
+    RATING_CHOICES = [(i, str(i)) for i in range(1, 6)]  # 1-5
+
+    product = models.ForeignKey(Product, related_name='reviews', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    rating = models.IntegerField(choices=RATING_CHOICES)
+    comment = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.product.name} - {self.rating}/5"
     
 # Create your models here.
 #unique=True в Django означает, что значение этого поля должно быть уникальным среди всех записей в таблице базы данных.

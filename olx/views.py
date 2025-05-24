@@ -4,7 +4,7 @@ from django.core.paginator import Paginator
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from .forms import RegisterForm, ProfileForm
+from .forms import RegisterForm, ProfileForm, ReviewForm
 from django.core.files.storage import FileSystemStorage
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -207,3 +207,18 @@ def favorites_list(request):
     return render(request, 'olx/favorites.html', {
         'favorites': favorites
     })
+
+@login_required
+def add_review(request, id):
+    product = Product.objects.get(id=id)
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.product = product
+            review.user = request.user
+            review.save()
+            return redirect('product_detail', id=id)
+    else:
+        form = ReviewForm() 
+    return render(request, 'olx/add_review.html', {'form': form, 'product': product})
