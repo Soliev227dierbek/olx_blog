@@ -6,18 +6,55 @@
 {% endblock %}
 
 {% block content %}
+<style>
+    #productCarousel .carousel-item img {
+      width: 100%;          /* по ширине контейнера */
+      height: 400px;        /* фиксированная высота для всех картинок */
+      object-fit: cover;    /* обрезает лишнее, сохраняя пропорции */
+      border-radius: 0.5rem; /* закругления, как у тебя */
+    }
+  </style>
+
 <div class="container py-4">
     <div class="row bg-white rounded shadow p-4 align-items-center">
-        <!-- Картинка слева -->
+        <!-- Карусель с фото товара слева -->
         <div class="col-md-6">
-            {% if product.image %}
-            <img src="{{ product.image.url }}" alt="{{ product.title }}" class="img-fluid rounded">
-            {% else %}
-            <img src="{% static 'img/9.png' %}" class="img-fluid rounded" alt="Default Image">
-            {% endif %}
+            <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    {% if product.image %}
+                    <div class="carousel-item active">
+                        <img src="{{ product.image.url }}" class="d-block w-100 rounded" alt="{{ product.title }}">
+                    </div>
+                    {% else %}
+                    <div class="carousel-item active">
+                        <img src="{% static 'img/9.png' %}" class="d-block w-100 rounded" alt="Default Image">
+                    </div>
+                    {% endif %}
+
+                    {% if product.image2 %}
+                    <div class="carousel-item">
+                        <img src="{{ product.image2.url }}" class="d-block w-100 rounded" alt="{{ product.title }}">
+                    </div>
+                    {% endif %}
+
+                    {% if product.image3 %}
+                    <div class="carousel-item">
+                        <img src="{{ product.image3.url }}" class="d-block w-100 rounded" alt="{{ product.title }}">
+                    </div>
+                    {% endif %}
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
         </div>
 
-        <!-- Описание справа -->
+        <!-- Описание товара справа -->
         <div class="col-md-6">
             <h2>{{ product.title }}</h2>
             <p>{{ product.text }}</p>
@@ -48,8 +85,7 @@
         {% empty %}
         <p>Пока нет отзывов.</p>
         {% endfor %}
-
-        <a href="{% url 'add_review' product.id %}" class="btn btn-primary mt-2">Добавить отзыв</a>
     </div>
 </div>
+
 {% endblock %}

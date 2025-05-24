@@ -28,6 +28,8 @@ class Product(models.Model):
     title = models.CharField('Название', max_length=255, blank=False)
     text = models.TextField('Текст')
     image = models.ImageField('Фото', blank=True, null=True)
+    image2 = models.ImageField('Фото 2', blank=True, null=True, upload_to='photo_2/')
+    image3 = models.ImageField('Фото 3', blank=True, null=True, upload_to='photo_3/')
     price = models.IntegerField('Цена', default=0)
     date = models.DateTimeField('Дата выпуска', default = timezone.now)
     category = models.ForeignKey(Subcategory, on_delete=models.CASCADE, verbose_name = 'Категория', default = get_default_subcategory)
