@@ -6,7 +6,8 @@
 {% endblock %}
 
 {% block content %}
-<h2>Избранные товары</h2>
+<div class="favorites-div" style="background: white; border-radius: 20px 20px 20px 20px; margin: 20px; font-family: 'Play', sans-serif;">
+<h2 style="padding-left: 10px; padding-top: 10px;">Избранные товары</h2>
 {% if user.is_authenticated %}
 <div style="display: flex; flex-wrap: wrap;">
     <div class="products-grid" style="display: flex; flex-wrap: wrap;">
@@ -45,4 +46,5 @@
     {% empty %}
         <p>Нет избранных товаров.</p>
     {% endfor %}
+</div>
 </div>

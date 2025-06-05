@@ -11,7 +11,7 @@
 
 <div class="review-div" style="background: white; border-radius: 20px 20px 20px 20px; margin: 20px;"><h2 style="margin-left: 10px; margin-top: 10px;">Оставить отзыв о продукте: {{ product.name }}</h2>
 
-<form method="post">
+<form method="POST">
     {% csrf_token %}
 
     <label><h6 style="margin-left: 10px;">Оценка:</h6></label>
@@ -22,7 +22,7 @@
                     {{ radio.tag }}
                     <span class="star">★</span>
                 </label>
-                <div class="rating-number">{{ radio.choice_label }}</div>
+                <div class="rating-number"></div>
             </div>
         {% endfor %}
     </div>

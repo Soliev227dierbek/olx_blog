@@ -2,10 +2,18 @@
 {% load static %}
 
 {% block content %}
-<h2>Редактирование профиля</h2>
+<div style="background: white; border-radius: 20px 20px 20px 20px; margin: 20px; font-family: 'Play', sans-serif;">
+<h2 style="padding-left: 10px;">Редактирование профиля</h2>
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Сохранить</button>
+    <button type="submit" class="btn btn-success" style="margin-left: 10px; margin-bottom: 10px;">Сохранить</button>
 </form>
+</div>
+    <style>
+        form p{
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+    </style>
 {% endblock %}

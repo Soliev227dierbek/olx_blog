@@ -25,10 +25,10 @@ class RegisterForm(UserCreationForm):
             return user
         
 class ProfileForm(forms.ModelForm):
-    name = forms.CharField(label="Имя", required=True, widget=forms.TextInput(attrs={'class' : 'form-control footer-input margin-b-20'}))
-    avatar = forms.ImageField(label="Аватар", required=True,widget=forms.ClearableFileInput(attrs={'class' : 'form-control footer-input margin-b-20'}))
+    name = forms.CharField(label="Имя", required=True, widget=forms.TextInput(attrs={'class' : 'form-control footer-input margin-20'}))
+    avatar = forms.ImageField(label="Аватар", required=True,widget=forms.ClearableFileInput(attrs={'class' : 'form-control footer-input margin-b-20 m-20'}))
     bio = forms.CharField(label="Биография", required=True, widget=forms.Textarea(attrs={'class' : 'form-control footer-input margin-b-20, margin-left: 20px;'}))
-    location = forms.CharField(label="Локация", required=True, widget=forms.TextInput(attrs={'class' : 'form-control footer-input margin-b-20'}))
+    location = forms.CharField(label="Локация", required=True, widget=forms.TextInput(attrs={'class' : 'form-control footer-input margin-b-20', 'margin': 20}))
 
     class Meta:
         model = Profile

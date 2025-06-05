@@ -14,13 +14,12 @@
       border-radius: 0.5rem; /* закругления, как у тебя */
     }
   </style>
-
-<div class="container py-4">
-    <div class="row bg-white rounded shadow p-4 align-items-center">
+<div class="div-product" style="background: white; border-radius: 20px 20px 20px 20px; margin: 20px;">
+    <div class="row rounded p-3 align-items-center">
         <!-- Карусель с фото товара слева -->
-        <div class="col-md-6">
+        <div class="col-md-6" style="padding-left: -20px;">
             <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-inner">
+                <div class="carousel-inner" style="border-radius: 10px 10px 10px 10px;">
                     {% if product.image %}
                     <div class="carousel-item active">
                         <img src="{{ product.image.url }}" class="d-block w-100 rounded" alt="{{ product.title }}">
@@ -55,27 +54,43 @@
         </div>
 
         <!-- Описание товара справа -->
-        <div class="col-md-6">
-            <h2>{{ product.title }}</h2>
-            <p>{{ product.text }}</p>
-            <h3 class="text-success">{{ product.price }} <small class="text-dark">сум</small></h3>
-            <h6 class="text-muted">{{ product.date|timesince }} назад</h6>
+        <div class="col-md-6" style="font-family: 'Play', sans-serif;">
+            <h2 style="text-align: end; font-family: 'Play', sans-serif;">{{ product.title }}</h2>
+            <p style="text-align: end;">{{ product.text }}</p>
+            <h3 class="text-success" style="text-align: end;">{{ product.price }} <small class="text-dark">сум</small></h3>
+            <h6 class="text-muted" style="text-align: end;">{{ product.date|timesince }} назад</h6>
 
             {% if user.is_authenticated %}
-            <form action="{% url 'delete' product.id %}" method="POST" class="my-2">
+            <form action="{% url 'delete' product.id %}" onsubmit="return confirm('Подтвердите отправку формы')" method="POST" class="my-2">
                 {% csrf_token %}
                 <button class="btn btn-danger" type="submit">Удалить</button>
             </form>
 
             <a href="{% url 'update' product.id %}" class="btn btn-success my-1">Обновить</a>
             <a href="{% url 'add_to_cart' product.id %}" class="btn btn-success my-1">+ Добавить в корзину</a>
-            <a href="{% url 'add_to_favorites' product.id %}" class="btn btn-link my-1">+ В избранные</a>
+            <a href="{% url 'add_to_favorites' product.id %}" class="btn btn-primary my-1" style="text-align: end;">+ В избранные</a>
             {% endif %}
         </div>
     </div>
 
-    <div class="mt-4">
-        <h3>Отзывы:</h3>
+    <a href="{% url 'add_review' product.id %}" style="font-family: 'Play', sans-serif; padding-left: 10px;">Добавить отзыв</a>
+
+<form method="POST" style="font-family: 'Play', sans-serif;">
+    {% csrf_token %}
+<div class="rating-stars">
+    {% for radio in form.rating %}
+    <div class="star-item" style="margin-left: 10px;">
+        <label for="{{ radio.id_for_label }}">
+            {{ radio.tag }}
+            <span class="star">★</span>
+        </label>
+        <div class="rating-number"></div>
+    </div>
+    {% endfor %}
+</div>
+</form>
+    <div class="mt-4" style="font-family: 'Play', sans-serif;">
+        <h3 style="padding-left: 10px;">Отзывы:</h3>
         {% for review in product.reviews.all %}
         <div class="bg-white p-3 rounded mb-2">
             <strong>{{ review.user.username }}</strong> оценил на {{ review.rating }}/5
@@ -83,9 +98,10 @@
             <small class="text-muted">{{ review.created_at|timesince }} назад</small>
         </div>
         {% empty %}
-        <p>Пока нет отзывов.</p>
+        <p style="padding-left: 10px; padding-bottom: 10px;">Пока нет отзывов.</p>
         {% endfor %}
     </div>
 </div>
-
+</div>
 {% endblock %}
+<div class="container py-4"></div>

@@ -22,6 +22,10 @@ class Subcategory(models.Model):
         return self.name
 
 class Product(models.Model):
+    CONDITION_CHOICES = [
+        ('Новый','Новый'),
+        ('Б/У','Б/У'),
+    ]
     def get_default_subcategory():
         default_subcategory = Subcategory.objects.first()
         return default_subcategory.id if default_subcategory else None
@@ -31,6 +35,7 @@ class Product(models.Model):
     image2 = models.ImageField('Фото 2', blank=True, null=True, upload_to='photo_2/')
     image3 = models.ImageField('Фото 3', blank=True, null=True, upload_to='photo_3/')
     price = models.IntegerField('Цена', default=0)
+    condition = models.CharField('Состояние', max_length=10, choices=CONDITION_CHOICES, default='Новый')
     date = models.DateTimeField('Дата выпуска', default = timezone.now)
     category = models.ForeignKey(Subcategory, on_delete=models.CASCADE, verbose_name = 'Категория', default = get_default_subcategory)
     

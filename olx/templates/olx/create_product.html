@@ -6,7 +6,7 @@ Create new post
 {% endblock %}
 
 {% block content %}
-<div class="create-card-div" style="background: rgb(255, 255, 255); margin: 10px; border-radius: 10px; width: 1060px; align-items: center; justify-content: center;">
+<div class="create-card-div" style="background: rgb(255, 255, 255); margin: 10px; border-radius: 10px; width: 1060px; align-items: center; justify-content: center; font-family: 'Play', sans-serif;">
     <form action="{% url 'create' %}" method="POST" enctype="multipart/form-data" class="form-create">
         {% csrf_token %}
         <p>
@@ -26,6 +26,25 @@ Create new post
                 <label for="formFile" class="form-label"><h3 style="margin-top: -30px; margin-left: 10px;">Image</h3></label>
                 <input class="form-control" style="margin: 10px; width: 1000px;" class="form-control-create" type="file" id="image" name="image" placeholder="image" required>
             </div>
+        </p>
+        <p>
+            <div class="mb-3">
+                <label for="formFile" class="form-label"><h3 style="margin-top: -30px; margin-left: 10px;">Image 2</h3></label>
+                <input class="form-control" style="margin: 10px; width: 1000px;" class="form-control-create" type="file" id="image2" name="image2" placeholder="image2" required>
+            </div>
+        </p>
+        <p>
+            <div class="mb-3">
+                <label for="formFile" class="form-label"><h3 style="margin-top: -30px; margin-left: 10px;">Image 3</h3></label>
+                <input class="form-control" style="margin: 10px; width: 1000px;" class="form-control-create" type="file" id="image3" name="image3" placeholder="image3" required>
+            </div>
+        </p>
+        <p>
+            <label for="condition"><h3 style="margin-top: -35px; margin-left: 10px;">Состояние</h3></label>
+                <select name="condition" id="condition" style="margin: 10px; width: 1000px;" class="form-control">
+                    <option value="new">Новый</option>
+                    <option value="used">Б/У</option>
+            </select>
         </p>
         <button class="btn btn-primary" class="btn" style="height: 40px; margin: 10px; width: 240px;">Create</button>
     </form>

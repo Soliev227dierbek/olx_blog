@@ -6,8 +6,8 @@
 {% endblock %}
 
 {% block content %}
-<div class="products-grid" style="display: flex; margin: 18px; background: white; border-radius: 20px 20px 20px 20px; flex-direction: column;">
-    <h3 style="padding: 15px;">{{ subcategory.name }}</h3>
+<div class="products-grid" style="display: flex; margin: 18px; font-family: 'Play', sans-serif; background: white; border-radius: 20px 20px 20px 20px; flex-direction: column;">
+    <h3 style="padding-left: 10px;">{{ subcategory.name }}</h3>
     {% for product in subcategory.product_set.all %}
         <div class="product-card">
             {% if product.image %}

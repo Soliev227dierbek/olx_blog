@@ -29,11 +29,24 @@ def create(request):
         product.title = request.POST.get('title')
         product.text = request.POST.get('text')
         product.price = request.POST.get('price')
+
         if request.FILES.get('image', False) != False:
             myfile = request.FILES['image']
             fs = FileSystemStorage()
             filename = fs.save(myfile.name, myfile)
             product.image = filename
+
+        if request.FILES.get('image2'):
+            myfile2 = request.FILES['image2']
+            fs2 = FileSystemStorage()
+            filename2 = fs2.save(myfile2.name, myfile2)
+            product.image2 = filename2
+
+        if request.FILES.get('image3'):
+            myfile3 = request.FILES['image3']
+            fs3 = FileSystemStorage()
+            filename3 = fs3.save(myfile3.name, myfile3)
+            product.image3 = filename3
         product.save()
         return redirect('index')
     return render(request, 'olx/create_product.html')
