@@ -11,8 +11,17 @@ from django.contrib.auth import authenticate, login, logout
 
 def index(request):
     products = Product.objects.all()
+    paginator = Paginator(products, 10)  # По 10 продуктов на страницу
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     categories = Category.objects.all()
-    return render(request, 'olx/index.html', {'products':products, 'categories':categories})
+
+    return render(request, 'olx/index.html', {
+        'page_obj': page_obj,
+        'categories': categories
+    })
 
 def product_detail(request, id):
     product = Product.objects.get(id=id)
@@ -26,6 +35,7 @@ def search(request):
 def create(request):
     if request.method == 'POST':
         product = Product()
+        product.user = request.user
         product.title = request.POST.get('title')
         product.text = request.POST.get('text')
         product.price = request.POST.get('price')

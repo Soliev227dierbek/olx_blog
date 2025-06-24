@@ -12,6 +12,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <style>
+        @media screen and (max-width: 768px) {
+            .create-card-div {
+                width: 95% !important;
+            }
+            .form-control {
+                width: 95% !important;
+            }
+            button.btn {
+                width: 95% !important;
+            }
+        }
+        </style>
     <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: rgb(19, 2, 72); font-family: 'Play', sans-serif;">
         <div class="container-fluid">
             <a class="navbar-brand" href="{% url 'index' %}"><img src="{% static 'img/OLX-Logo.png' %}" width="50" height="30" alt=""></a>

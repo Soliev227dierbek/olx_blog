@@ -3,7 +3,7 @@
 
 {% block content %}
 <div style="background: white; border-radius: 20px 20px 20px 20px; margin: 20px; font-family: 'Play', sans-serif;">
-<h2 style="padding-left: 10px;">Редактирование профиля</h2>
+<h2 style="padding-left: 10px; padding-top: 10px;">Редактирование профиля</h2>
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}

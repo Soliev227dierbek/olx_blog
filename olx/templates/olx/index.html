@@ -11,14 +11,15 @@
   <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search">
   <button class="btn btn-outline-success" type="submit">Search</button>
 </form>
+
 <div class="card-group">
     {% for category in categories %}
-        <div class="category-card" style="margin-left: 20px; gap: 10px; font-family: 'Play', sans-serif;" >
+        <div class="category-card" style="margin-left: 20px; gap: 10px; font-family: 'Play', sans-serif;">
             <a href="{% url 'categories' %}" style="text-decoration: none;">
                 <div class="category-content">
                     <ul>
                         {% for subcategory in category.subcategories.all %}
-                            <!-- если нужно — отобрази подкатегории -->
+                            <!-- Подкатегории -->
                         {% endfor %}
                     </ul>
                     <h5 class="category-title">{{ category.name }}</h5>
@@ -28,8 +29,8 @@
     {% endfor %}
 </div>
 
-  <div class="products-grid">
-    {% for product in products %}
+<div class="products-grid">
+    {% for product in page_obj %}
         <div class="product-card" style="font-family: 'Play', sans-serif;">
             {% if product.image %}
                 <img src="{{ product.image.url }}" alt="" class="product-image">
@@ -38,15 +39,36 @@
             {% endif %}
             <div class="product-name" style="margin-left: 5px; font-family: 'Play', monospace;">{{ product.title }}</div>
             <div class="product-description" style="margin-left: 5px; font-family: 'Play', sans-serif;">{{ product.text|truncatechars:60 }}</div>
-            <div class="product-time">{{ product.date|timesince }} назад</div>
+            <div class="product-time" style="padding-left: 10px;">{{ product.date|timesince }} назад</div>
             <div class="product-condition" style="padding-left: 10px;">{{ product.condition }}</div>
+            <small style="padding-left: 10px;">Продавец: {{ product.user.username }}</small>
             <a href="{% url 'product_detail' id=product.id %}" style="font-family: 'Play', sans-serif;"><div class="product-price" style="text-align: end; padding-right: 10px;">{{ product.price }} сум</div></a>
             {% if user.is_authenticated %}
                 <div class="cart-icon"><a href="{% url 'add_to_cart' product.id %}">🛒</a></div>
-            {% else %}
-
             {% endif %}
         </div>
     {% endfor %}
-  </div>
+</div>
+
+<!-- Пагинация -->
+<div class="pagination" style="margin-top: 30px; text-align: center; font-family: 'Play', sans-serif;">
+    {% if page_obj.has_previous %}
+        <a href="?page=1">Первая</a>
+        <a href="?page={{ page_obj.previous_page_number }}">←</a>
+    {% endif %}
+
+    {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+            <strong style="margin: 0 5px;">{{ num }}</strong>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <a href="?page={{ num }}" style="margin: 0 5px;">{{ num }}</a>
+        {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">→</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">Последняя</a>
+    {% endif %}
+</div>
+
 {% endblock %}
